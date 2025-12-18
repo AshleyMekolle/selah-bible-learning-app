@@ -52,7 +52,7 @@ Selah addresses these challenges by:
 
 > Subject to evolution as the project grows
 
-* **Frontend:** React / Next.js
+* **Frontend:** React 
 * **Styling:** CSS / Tailwind (TBD)
 * **Backend:** Firebase / Node.js (TBD)
 * **Authentication:** Email / Social login (later phase)
