@@ -368,8 +368,8 @@ selah/
     completed: true,
     completedAt: Timestamp
   },
-  readingPlanDay: 1,                // Day number in plan
-  streakOnCompletion: 5             // Streak value when completed
+  readingPlanDay: 1,                
+  streakOnCompletion: 5             
 }
 ```
 
