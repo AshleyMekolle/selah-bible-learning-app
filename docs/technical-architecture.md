@@ -338,7 +338,7 @@ selah/
     textSize: "medium",              // small | medium | large
     notificationTime: "07:00",       // HH:MM format
     notificationsEnabled: true,
-    preferredTranslation: "ESV"      // For future use
+    preferredTranslation: "ESV"      
   },
   stats: {
     currentStreak: 5,
