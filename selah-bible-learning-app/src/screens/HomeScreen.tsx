@@ -18,7 +18,7 @@ export default function HomeScreen({navigation}: Props) {
             <Text style={styles.cardText}>Start today's bible reading and keep your streak alive!</Text>
         </Card>
         <View style={styles.actions}>
-            <ActionButton label="Read" onPress={() => navigation.navigate('Progress')}/>
+            <ActionButton label="Read" onPress={() => navigation.navigate('Read')}/>
             <ActionButton label="Study" onPress={() => navigation.navigate('Progress')}/>
             <ActionButton label="Reflect" onPress={() => navigation.navigate('Profile')}/>
         </View>
