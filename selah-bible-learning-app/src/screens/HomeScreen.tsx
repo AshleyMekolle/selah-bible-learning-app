@@ -1,8 +1,17 @@
 import { View, Text, StyleSheet } from "react-native"
 import Card from "../components/card";
 import ActionButton from "../components/ActionButton";
+import { NativeStackScreenProps } from "@react-navigation/native-stack";
 
-export default function HomeScreen() {
+type RootStackParamList ={
+    Home: undefined;
+    Profle: undefined;
+    Progress: undefined
+}
+
+type Props = NativeStackScreenProps<RootStackParamList, 'Home'>;
+
+export default function HomeScreen({navigation}: Props) {
   return(
     <View style={styles.container}>
         <Text style={styles.greeting}>Good Morning!</Text>
@@ -14,9 +23,9 @@ export default function HomeScreen() {
             <Text style={styles.cardText}>Start today's bible reading and keep your streak alive!</Text>
         </Card>
         <View style={styles.actions}>
-            <ActionButton label="Read"/>
-            <ActionButton label="Study"/>
-            <ActionButton label="Reflect"/>
+            <ActionButton label="Read" onPress={() => navigation.navigate('Progress')}/>
+            <ActionButton label="Study" onPress={() => navigation.navigate('Progress')}/>
+            <ActionButton label="Reflect" onPress={() => navigation.navigate('Profile')}/>
         </View>
     </View>
   );
