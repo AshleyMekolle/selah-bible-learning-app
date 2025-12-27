@@ -11,7 +11,6 @@ const Stack = createNativeStackNavigator();
 
 export default function AppNavigator() {
     return(
-      <NavigationContainer>
         <Stack.Navigator>
             <Stack.Screen name="Home" component={HomeScreen}/>
             <Stack.Screen name="Progress" component={ProgressScreen}/>
@@ -20,6 +19,5 @@ export default function AppNavigator() {
             <Stack.Screen name="Read" component={ReadScreen}/>
             <Stack.Screen name="Study" component={StudyScreen}/>
         </Stack.Navigator>
-      </NavigationContainer>
     );
 }

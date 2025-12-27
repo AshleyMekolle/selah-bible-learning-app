@@ -4,14 +4,19 @@ import ActionButton from "../components/ActionButton";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../navigation/types";
 import { colors } from "../theme/colors";
-
+import { useReading } from "../context/ReadingContext";
 
 type Props = NativeStackScreenProps<RootStackParamList, 'Home'>;
 
 export default function HomeScreen({navigation}: Props) {
+
+    const {streak} = useReading()
   return(
     <View style={styles.container}>
         <Text style={styles.greeting}>Good Morning!</Text>
+        <Text style={styles.streakText}>
+    🔥 Current streak: {streak} day{streak !== 1 ? "s" : ""}
+            </Text>
 
         <Card>
             <Text style={styles.cardTitle}>
@@ -19,6 +24,7 @@ export default function HomeScreen({navigation}: Props) {
             </Text>
             <Text style={styles.cardText}>Start today's bible reading and keep your streak alive!</Text>
         </Card>
+
         <View style={styles.actions}>
             <ActionButton label="Read" onPress={() => navigation.navigate('Read')}/>
             <ActionButton label="Study" onPress={() => navigation.navigate('Progress')}/>
@@ -53,6 +59,12 @@ export default function HomeScreen({navigation}: Props) {
     actions:{
         flexDirection:'row',
         justifyContent:'space-between',
+    },
+    streakText: {
+    fontSize: 14,
+    marginBottom: 12,
+    color: colors.primary,
+    fontWeight: "500",
     },
   }
 
