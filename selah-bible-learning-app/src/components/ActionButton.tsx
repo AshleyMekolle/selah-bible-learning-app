@@ -1,4 +1,5 @@
 import { Pressable,StyleSheet, Text} from "react-native";
+import { colors } from "../theme/colors";
 
 type ActionButtonProps ={
     label: string;
@@ -22,7 +23,8 @@ const styles = StyleSheet.create({
     button:{
         padding:16,
         borderRadius:10,
-        backgroundColor:'#E6E6E6',
+        backgroundColor:colors.primary,
+        opacity:0.5,
         width:'30%',
         alignItems:'center'
     },

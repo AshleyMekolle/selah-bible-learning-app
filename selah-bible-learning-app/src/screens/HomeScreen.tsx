@@ -3,6 +3,8 @@ import Card from "../components/card";
 import ActionButton from "../components/ActionButton";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../navigation/types";
+import { colors } from "../theme/colors";
+
 
 type Props = NativeStackScreenProps<RootStackParamList, 'Home'>;
 
@@ -29,25 +31,28 @@ export default function HomeScreen({navigation}: Props) {
   const styles = StyleSheet.create({
     container: {
         flex: 1,
-        padding: 20
+        padding: 20,
+        backgroundColor:colors.background
     },
     greeting:{
         fontSize:24,
         fontWeight:'600',
-        marginBottom:20
+        marginBottom:20,
+        color:colors.textPrimary
     },
     cardTitle:{
         fontSize:18,
         fontWeight:'600',
-        marginBottom:8
+        marginBottom:8,
+        color:colors.textPrimary
     },
     cardText:{
         fontSize:14,
-        color:'#555'   
+        color:colors.textSecondary,
     },
     actions:{
         flexDirection:'row',
-        justifyContent:'space-between'
+        justifyContent:'space-between',
     },
   }
 
