@@ -1,8 +1,10 @@
 import {View, Text, StyleSheet, Pressable} from 'react-native'
+import { useState } from 'react';
 import { colors } from '../theme/colors';
 import ScriptureCard from '../components/ScriptureCard';
 
 export default function ReadScreen (){
+    const [completed, setCompleted] = useState(false)
     return(
         <View style={styles.container}>
             <ScriptureCard reference="Genesis 1:1–5">
@@ -11,10 +13,12 @@ export default function ReadScreen (){
               <Text style={styles.verse}> And God said, Let there be light: and there was light</Text>
             </ScriptureCard>
 
-            <Text style={styles.progressText}> Reading 1 of 5</Text>
+            <Text style={styles.progressText}> {completed ? "Reading Complete" : "Reading 1 of 5"}</Text>
 
-            <Pressable style={styles.completeButton} disabled>
-            <Text style={styles.completeButtonText}>Complete Reading</Text>
+            <Pressable style={[styles.completeButton, completed && styles.completedButton,]} 
+            onPress={() => setCompleted(true)}
+            disabled={completed}>
+            <Text style={styles.completeButtonText}>{completed ? "Completed" : "Complete Reading"}</Text>
             </Pressable>
         </View>
     );
@@ -43,6 +47,9 @@ const styles = StyleSheet.create({
         backgroundColor:colors.primary,
         alignItems:'center',
         opacity:0.5
+    },
+    completedButton:{
+        backgroundColor: colors.accent,
     },
     completeButtonText:{
         padding:16,
