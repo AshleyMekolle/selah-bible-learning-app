@@ -2,12 +2,7 @@ import { View, Text, StyleSheet } from "react-native"
 import Card from "../components/card";
 import ActionButton from "../components/ActionButton";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
-
-type RootStackParamList ={
-    Home: undefined;
-    Profle: undefined;
-    Progress: undefined
-}
+import { RootStackParamList } from "../navigation/types";
 
 type Props = NativeStackScreenProps<RootStackParamList, 'Home'>;
 
