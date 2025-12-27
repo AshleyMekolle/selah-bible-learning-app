@@ -1,25 +1,22 @@
 import { View, Text, StyleSheet } from "react-native"
+import Card from "../components/card";
+import ActionButton from "../components/ActionButton";
 
 export default function HomeScreen() {
   return(
     <View style={styles.container}>
         <Text style={styles.greeting}>Good Morning!</Text>
-        <View style={styles.card}>
+
+        <Card>
             <Text style={styles.cardTitle}>
                 Today's Reading
             </Text>
             <Text style={styles.cardText}>Start today's bible reading and keep your streak alive!</Text>
-        </View>
+        </Card>
         <View style={styles.actions}>
-          <View style={styles.actionItem}>
-            <Text>Read</Text>
-          </View>
-          <View style={styles.actionItem}>
-            <Text>Study</Text>
-          </View>
-          <View style={styles.actionItem}>
-            <Text>Reflect</Text>
-          </View>
+            <ActionButton label="Read"/>
+            <ActionButton label="Study"/>
+            <ActionButton label="Reflect"/>
         </View>
     </View>
   );
@@ -35,12 +32,6 @@ export default function HomeScreen() {
         fontWeight:'600',
         marginBottom:20
     },
-    card:{
-        padding:16,
-        borderRadius:20,
-        backgroundColor:'#F2F2F2',
-        marginBottom:24
-    },
     cardTitle:{
         fontSize:18,
         fontWeight:'600',
@@ -54,13 +45,6 @@ export default function HomeScreen() {
         flexDirection:'row',
         justifyContent:'space-between'
     },
-    actionItem:{
-        padding:16,
-        borderRadius:10,
-        backgroundColor:'#E6E6E6',
-        width:'30%',
-        alignItems:'center'
-    }
   }
 
   )
