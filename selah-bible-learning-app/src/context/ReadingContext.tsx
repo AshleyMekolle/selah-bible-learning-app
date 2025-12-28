@@ -10,7 +10,8 @@ type ReadingContextType ={
 const ReadingContext = createContext<ReadingContextType | undefined>(undefined);
 const STORAGE_KEYS ={
     streak: "@reading_streak",
-    completedToday: "@completedToday",
+    completedToday: "@completed_today",
+    lastCompletedDate: "@last_completed_date"
 }
 
 export function ReadingProvider ({children} : {children: ReactNode}){
@@ -26,13 +27,19 @@ export function ReadingProvider ({children} : {children: ReactNode}){
                 const storedCompleted = await AsyncStorage.getItem(
                     STORAGE_KEYS.completedToday
                 );
+                const storedDate = await AsyncStorage.getItem(
+                    STORAGE_KEYS.lastCompletedDate
+                )
+                const today = getToday();
 
                 if (storedStreak !== null){
                     setStreak(Number(storedStreak));
                 }
 
-                if (storedCompleted !== null){
-                setCompletedToday(storedCompleted === "true");
+                if (storedDate === today && storedCompleted === "true"){
+                setCompletedToday(true);
+                }else{
+                    setCompletedToday(false);
                 }
             } catch (error){
                 console.error("Failed to load reading data", error);
@@ -54,12 +61,22 @@ export function ReadingProvider ({children} : {children: ReactNode}){
         AsyncStorage.setItem(STORAGE_KEYS.completedToday, completedToday.toString());
     }, [completedToday])
 
-    const completeReading = () =>{
+    const completeReading = async () =>{
         if (!completedToday){
+            const today = getToday();
             setCompletedToday(true);
             setStreak((prev) => prev + 1)
+
+            await AsyncStorage.setItem(
+                STORAGE_KEYS.lastCompletedDate,
+                today
+            )
         }
     };
+
+    const getToday = () =>{
+        return new Date().toISOString().split("T")[0];
+    }
 
     return(
         <ReadingContext.Provider
