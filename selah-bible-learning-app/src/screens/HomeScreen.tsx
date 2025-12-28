@@ -5,6 +5,7 @@ import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../navigation/types";
 import { colors } from "../theme/colors";
 import { useReading } from "../context/ReadingContext";
+import { Ionicons } from "@expo/vector-icons";
 
 type Props = NativeStackScreenProps<RootStackParamList, 'Home'>;
 
@@ -14,10 +15,20 @@ export default function HomeScreen({navigation}: Props) {
   return(
     <View style={styles.container}>
         <Text style={styles.greeting}>Good Morning!</Text>
-        <Text style={styles.streakText}>
+        {/* <Text style={styles.streakText}>
     🔥 Current streak: {streak} day{streak !== 1 ? "s" : ""}
-            </Text>
+            </Text> */}
 
+        <View style={styles.streakRow}>
+            <Ionicons
+            name="flame-outline"
+            size={18}
+            color={colors.primary}
+            />
+            <Text style={styles.streakText}>
+            Streak: {streak} day{streak !== 1 ? "s" : ""}
+            </Text>
+        </View>
         <Card>
             <Text style={styles.cardTitle}>
                 Today's Reading
@@ -61,11 +72,16 @@ export default function HomeScreen({navigation}: Props) {
         justifyContent:'space-between',
     },
     streakText: {
-    fontSize: 14,
-    marginBottom: 12,
-    color: colors.primary,
-    fontWeight: "500",
+        fontSize: 14,
+        color: colors.primary,
+        fontWeight: "500",
     },
+    streakRow:{
+        flexDirection:"row",
+        alignItems:"center",
+        gap:6,
+        marginBottom:12,
+    }
   }
 
   )
