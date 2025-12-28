@@ -40,9 +40,18 @@ export default function HomeScreen({navigation}: Props) {
         </Card>
 
         <View style={styles.actions}>
-            <ActionButton label="Read" onPress={() => navigation.navigate('Read')}/>
-            <ActionButton label="Study" onPress={() => navigation.navigate('Progress')}/>
-            <ActionButton label="Reflect" onPress={() => navigation.navigate('Profile')}/>
+            <ActionButton 
+            label="Read" 
+            iconName="book-outline"
+            onPress={() => navigation.navigate('Read')}/>
+            <ActionButton 
+            label="Study" 
+            iconName="school-outline"
+            onPress={() => navigation.navigate('Progress')}/>
+            <ActionButton 
+            label="Reflect"
+            iconName="create-outline" 
+            onPress={() => navigation.navigate('Profile')}/>
         </View>
     </View>
   );

@@ -1,34 +1,62 @@
-import { Pressable,StyleSheet, Text} from "react-native";
+import { Pressable,StyleSheet, Text, View} from "react-native";
 import { colors } from "../theme/colors";
+import { Ionicons } from "@expo/vector-icons";
+import { typography } from "../theme/typography";
 
 type ActionButtonProps ={
     label: string;
     onPress?: () => void;
+    iconName?: keyof typeof Ionicons.glyphMap;
+    disabled?:boolean;
 }
-export default function ActionButton({label, onPress}: ActionButtonProps) {
+export default function ActionButton({label, onPress, iconName, disabled=false}: ActionButtonProps) {
     return(
       <Pressable
         style ={({ pressed }) => [
             styles.button,
-            pressed && styles.pressed
+            pressed && !disabled && styles.pressed,
+            disabled && styles.disabled
         ]}
         onPress={onPress}
+        disabled={disabled}
         >
-        <Text>{label}</Text>
+            <View style={styles.content}>
+            {iconName &&(
+                <Ionicons
+                name={iconName}
+                size={18}
+                color="#FFF"
+                />
+            )}
+        <Text style={styles.label}>{label}</Text>
+        </View>
         </Pressable>
     )
 }
 
 const styles = StyleSheet.create({
     button:{
-        padding:16,
-        borderRadius:10,
+        paddingHorizontal:16,
+        paddingVertical:14,
+        borderRadius:14,
         backgroundColor:colors.primary,
-        opacity:0.5,
-        width:'30%',
-        alignItems:'center'
+        minWidth:90
     },
     pressed:{
-        opacity:0.7
+        opacity:0.9
+    },
+    disabled:{
+       opacity:0.5
+    },
+    content:{
+        flexDirection:"row",
+        alignItems:"center",
+        justifyContent:"center",
+        gap:8
+    },
+    label:{
+        fontSize:14,
+        color:"#FFF",
+        fontFamily:typography.medium
     }
 })
