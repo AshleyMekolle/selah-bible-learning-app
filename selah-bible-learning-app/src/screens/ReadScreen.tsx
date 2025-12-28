@@ -2,6 +2,7 @@ import {View, Text, StyleSheet, Pressable} from 'react-native'
 import { colors } from '../theme/colors';
 import ScriptureCard from '../components/ScriptureCard';
 import { useReading } from '../context/ReadingContext';
+import { Ionicons } from '@expo/vector-icons';
 
 export default function ReadScreen (){
     const {completedToday, completeReading} = useReading();
@@ -13,11 +14,23 @@ export default function ReadScreen (){
               <Text style={styles.verse}> And God said, Let there be light: and there was light</Text>
             </ScriptureCard>
 
-            <Text style={styles.progressText}> {completedToday ? "Reading Complete" : "Reading 1 of 5"}</Text>
+            <View style={styles.statusRow}>
+              <Ionicons 
+              name={completedToday ? "checkmark-circle" : "time-outline"}
+              size={22}
+              color={completedToday ? colors.primary : colors.textSecondary}
+              />
+              <Text style={styles.statusText}> {completedToday ? "Reading completed today" : "Today's reading in progress"}</Text>
+            </View>
 
             <Pressable style={[styles.completeButton, completedToday && styles.completedButton,]} 
             onPress={completeReading}
             disabled={completedToday}>
+                <Ionicons
+                name={completedToday ? "heart" : "book"}
+                size={18}
+                color="#FFF"
+                />
             <Text style={styles.completeButtonText}>{completedToday ? "Completed" : "Complete Reading"}</Text>
             </Pressable>
         </View>
@@ -49,11 +62,27 @@ const styles = StyleSheet.create({
         opacity:0.5
     },
     completedButton:{
-        backgroundColor: colors.accent,
+        padding:16,
+        borderRadius:14,
+        flexDirection:"row",
+        alignItems:"center",
+        justifyContent:"center",
+        gap:8,
+        backgroundColor: colors.primary,
     },
     completeButtonText:{
         padding:16,
         fontWeight:'600',
         color:'#FFF',
+    },
+    statusRow:{
+        flexDirection:"row",
+        alignItems:"center",
+        gap:8,
+        marginVertical:12,
+    },
+    statusText:{
+        fontSize:14,
+        color:colors.textSecondary
     }
 })
