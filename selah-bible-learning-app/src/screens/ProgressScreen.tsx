@@ -4,6 +4,7 @@ import { typography } from "../theme/typography";
 import { colors } from "../theme/colors";
 import { useReading } from "../context/ReadingContext";
 import Card from "../components/card";
+import { act } from "react";
 
 export default function ProgressScreen() {
   const {streak} = useReading()
@@ -32,8 +33,30 @@ export default function ProgressScreen() {
 
       <Card>
         <Text style={styles.sectionTitle}>This Week </Text>
-        <View>
+        <View style={styles.weekRow}>
+         {[...Array(7)].map((_, index) => {
+            const active = index < streak && streak > 0;
+            return(
+              <View
+              key={index}
+              style={[styles.dayCircle,
+                active && styles.dayCircleActive
+              ]}
+              />
+            );
+          })}
+        </View>
+        <Text style={styles.weekHint}>
+          One circle for each day spent in Scripture.
+        </Text>
+      </Card>
 
+      <Card>
+        <View style={styles.encouragementRow}>
+          <Ionicons name="heart-outline" size={18} color={colors.primary} />
+          <Text style={styles.encouragementText}>
+            Grace meets you where you are.
+          </Text>
         </View>
       </Card>
     </View>
