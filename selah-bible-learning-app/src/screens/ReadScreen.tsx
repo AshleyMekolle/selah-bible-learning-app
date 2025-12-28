@@ -3,6 +3,7 @@ import { colors } from '../theme/colors';
 import ScriptureCard from '../components/ScriptureCard';
 import { useReading } from '../context/ReadingContext';
 import { Ionicons } from '@expo/vector-icons';
+import { typography } from '../theme/typography';
 
 export default function ReadScreen (){
     const {completedToday, completeReading} = useReading();
@@ -20,7 +21,8 @@ export default function ReadScreen (){
               size={22}
               color={completedToday ? colors.primary : colors.textSecondary}
               />
-              <Text style={styles.statusText}> {completedToday ? "Reading completed today" : "Today's reading in progress"}</Text>
+              <Text style={styles.statusText}> {completedToday ? "You have spent time in the Word today."
+               : "Take a moment with today’s Scripture."}</Text>
             </View>
 
             <Pressable style={[styles.completeButton, completedToday && styles.completedButton,]} 
@@ -83,6 +85,7 @@ const styles = StyleSheet.create({
     },
     statusText:{
         fontSize:14,
+        fontFamily:typography.regular,
         color:colors.textSecondary
     }
 })

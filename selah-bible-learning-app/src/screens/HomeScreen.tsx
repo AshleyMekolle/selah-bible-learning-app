@@ -6,6 +6,7 @@ import { RootStackParamList } from "../navigation/types";
 import { colors } from "../theme/colors";
 import { useReading } from "../context/ReadingContext";
 import { Ionicons } from "@expo/vector-icons";
+import { typography } from "../theme/typography";
 
 type Props = NativeStackScreenProps<RootStackParamList, 'Home'>;
 
@@ -15,10 +16,11 @@ export default function HomeScreen({navigation}: Props) {
   return(
     <View style={styles.container}>
         <Text style={styles.greeting}>Good Morning!</Text>
-        {/* <Text style={styles.streakText}>
-    🔥 Current streak: {streak} day{streak !== 1 ? "s" : ""}
-            </Text> */}
-
+         {streak === 0 ? (
+            <Text>
+                A gentle start is a great start beloved
+            </Text>
+         ) :(
         <View style={styles.streakRow}>
             <Ionicons
             name="flame-outline"
@@ -29,6 +31,7 @@ export default function HomeScreen({navigation}: Props) {
             Streak: {streak} day{streak !== 1 ? "s" : ""}
             </Text>
         </View>
+        )}
         <Card>
             <Text style={styles.cardTitle}>
                 Today's Reading
@@ -53,18 +56,19 @@ export default function HomeScreen({navigation}: Props) {
     },
     greeting:{
         fontSize:24,
-        fontWeight:'600',
+        fontFamily:typography.semibold,
         marginBottom:20,
         color:colors.textPrimary
     },
     cardTitle:{
         fontSize:18,
-        fontWeight:'600',
+        fontFamily:typography.semibold,
         marginBottom:8,
         color:colors.textPrimary
     },
     cardText:{
         fontSize:14,
+        fontFamily:typography.regular,
         color:colors.textSecondary,
     },
     actions:{
@@ -81,6 +85,12 @@ export default function HomeScreen({navigation}: Props) {
         alignItems:"center",
         gap:6,
         marginBottom:12,
+    },
+    emptyStreakText:{
+        fontSize:14,
+        color:colors.textSecondary,
+        marginTop:12,
+        fontFamily:typography.regular
     }
   }
 
