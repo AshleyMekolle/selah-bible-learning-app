@@ -1,4 +1,7 @@
 import {View, Text, StyleSheet, TextInput} from 'react-native'
+import { useEffect, useState } from 'react';
+import { saveReflection } from '../utils/reflectionStorage';
+import { getReflectionbyDate } from '../utils/reflectionStorage';
 import { colors } from '../theme/colors';
 import { typography } from '../theme/typography';
 import { Ionicons } from '@expo/vector-icons';
@@ -6,6 +9,35 @@ import Card from '../components/card';
 import ActionButton from '../components/ActionButton';
 
 export default function ReflectScreen (){
+
+    const [text, setText] = useState("");
+    const [saved, setSaved] = useState(false);
+
+    const today = new Date().toISOString().split("T")[0];
+
+    const handleSave = async () => {
+        if (!text.trim()) return;
+
+        await saveReflection({
+            date: today,
+            text
+        })
+
+        setSaved(true)
+    }
+
+    useEffect(() => {
+  const loadReflection = async () => {
+    const existing = await getReflectionbyDate(today);
+    if (existing) {
+      setText(existing.text);
+    }
+  };
+
+  loadReflection();
+}, []);
+
+
     return(
         <View style={styles.container}>
             <Text style={styles.title}>Reflect</Text>
@@ -32,13 +64,21 @@ export default function ReflectScreen (){
           placeholder="Write freely…"
           placeholderTextColor={colors.textSecondary}
           multiline
+          value={text}
+          onChangeText={setText}
         />
       </Card>
       <ActionButton
         label="Save Reflection"
         iconName="heart-outline"
-        onPress={() => {}}
+        onPress={handleSave}
       />
+
+      {saved && (
+        <Text style={styles.savedText}>
+            Reflection saved quietly.
+        </Text>
+        )}
 
         </View>
     );
@@ -78,5 +118,12 @@ const styles = StyleSheet.create({
         color:colors.textPrimary,
        minHeight:120,
        textAlignVertical:"top"
+    },
+    savedText:{
+        marginTop:8,
+        fontSize:12,
+        fontFamily:typography.regular,
+        color:colors.textSecondary,
+        textAlign:"center"
     }
 })
