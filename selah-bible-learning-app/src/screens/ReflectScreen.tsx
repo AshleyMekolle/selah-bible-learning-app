@@ -1,4 +1,4 @@
-import {View, Text, StyleSheet} from 'react-native'
+import {View, Text, StyleSheet, TextInput} from 'react-native'
 import { colors } from '../theme/colors';
 import { typography } from '../theme/typography';
 import { Ionicons } from '@expo/vector-icons';
@@ -12,6 +12,34 @@ export default function ReflectScreen (){
             <Text style={styles.subtitle}>
         Take a moment to respond to today’s Scripture.
       </Text>
+
+      <Card>
+        <View style={styles.promptRow}>
+            <Ionicons
+            name="chatbubble-ellipses-outline"
+            size={18}
+            color={colors.primary}
+            />
+            <Text style={styles.promptText}>
+            What stood out to you today?
+          </Text>
+        </View>
+      </Card>
+
+      <Card>
+        <TextInput
+          style={styles.input}
+          placeholder="Write freely…"
+          placeholderTextColor={colors.textSecondary}
+          multiline
+        />
+      </Card>
+      <ActionButton
+        label="Save Reflection"
+        iconName="heart-outline"
+        onPress={() => {}}
+      />
+
         </View>
     );
 }
