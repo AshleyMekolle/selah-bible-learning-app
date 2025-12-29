@@ -6,6 +6,7 @@ import ReadScreen from "../screens/ReadScreen";
 import ReflectScreen from "../screens/ReflectScreen";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import ReflectionHistoryScreen from "../screens/ReflectionHistory";
 
 const Stack = createNativeStackNavigator();
 
@@ -18,6 +19,8 @@ export default function AppNavigator() {
             <Stack.Screen name="Reflect" component={ReflectScreen}/>
             <Stack.Screen name="Read" component={ReadScreen}/>
             <Stack.Screen name="Study" component={StudyScreen}/>
+            <Stack.Screen name="ReflectionHistory" component={ReflectionHistoryScreen}/>
+
         </Stack.Navigator>
     );
 }

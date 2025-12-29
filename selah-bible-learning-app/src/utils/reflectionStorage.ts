@@ -34,3 +34,21 @@ export async function getReflectionbyDate(date: string) {
         return null;
     }
 }
+
+export async function getAllReflections() {
+    try{
+        const existing = await AsyncStorage.getItem(STORAGE_KEY);
+
+        if(!existing) return [];
+
+        const refelectionsMap = JSON.parse(existing);
+
+        return Object.values(refelectionsMap).sort(
+            (a: any, b: any) => b.date.localeCompare(a.date)
+        );
+
+    }catch (error){
+        console.error("Failed to load refelections", error)
+        return [];
+    }
+}

@@ -4,5 +4,6 @@ export type RootStackParamList ={
     Reflect: undefined;
     Study: undefined;
     Progress: undefined;
+    ReflectionHistory: undefined;
     Profile: undefined
 }
