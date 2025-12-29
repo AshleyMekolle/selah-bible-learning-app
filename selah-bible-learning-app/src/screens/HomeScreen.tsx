@@ -56,7 +56,7 @@ export default function HomeScreen({navigation}: Props) {
             <ActionButton 
                 label="Reflect"
                 iconName="create-outline" 
-                onPress={() => navigation.navigate('Profile')}
+                onPress={() => navigation.navigate('Reflect')}
             />
         </View>
     </View>
