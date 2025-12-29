@@ -7,6 +7,7 @@ import { typography } from '../theme/typography';
 
 export default function ReadScreen (){
     const {completedToday, completeReading} = useReading();
+    console.log('completedToday value:', completedToday, 'type:', typeof completedToday);
     return(
         <View style={styles.container}>
             <ScriptureCard reference="Genesis 1:1–5">
@@ -25,7 +26,7 @@ export default function ReadScreen (){
                : "Take a moment with today’s Scripture."}</Text>
             </View>
 
-            <Pressable style={[styles.completeButton, completedToday && styles.completedButton,]} 
+            <Pressable style={[styles.completeButton, completedToday ? styles.completedButton : {},]} 
             onPress={completeReading}
             disabled={completedToday}>
                 <Ionicons
@@ -73,7 +74,6 @@ const styles = StyleSheet.create({
         backgroundColor: colors.primary,
     },
     completeButtonText:{
-        padding:16,
         fontWeight:'600',
         color:'#FFF',
     },

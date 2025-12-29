@@ -43,7 +43,7 @@ export default function ProgressScreen() {
                 active && styles.dayCircleActive
               ]}
               />
-            );
+            )
           })}
         </View>
         <Text style={styles.weekHint}>
