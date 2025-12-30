@@ -1,21 +1,27 @@
-const BASE_URL = "https://rest.api.bible"
+import Constants from "expo-constants";
 
-const headers ={
-    "api-key": process.env.BIBLE_APIKEY!,
-}
+const BASE_URL = "https://api.scripture.api.bible/v1";
 
-export async function fetchChapter(bookId:string,
-    chapter: number
-) {
-    const response = await fetch(
-        `${BASE_URL}/bibles/${process.env.BOBLE_ID}/chapters/${bookId}.${chapter}/verses`,
-        {headers}
-    )
+const API_KEY = Constants.expoConfig?.extra?.BIBLE_API_KEY;
+const BIBLE_ID = Constants.expoConfig?.extra?.BIBLE_ID;
 
-    if(!response.ok){
-        throw new Error("Failed to fetch scripture")
+export async function fetchChapter(bookId: string, chapter: number) {
+  if (!API_KEY || !BIBLE_ID) {
+    throw new Error("Bible API configuration missing");
+  }
+
+  const response = await fetch(
+    `${BASE_URL}/bibles/${BIBLE_ID}/chapters/${bookId}.${chapter}/verses`,
+    {
+      headers: {
+        "api-key": API_KEY,
+      },
     }
+  );
 
-    return response.json()
-    
+  if (!response.ok) {
+    throw new Error("Failed to fetch scripture");
+  }
+
+  return response.json();
 }

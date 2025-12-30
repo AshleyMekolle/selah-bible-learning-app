@@ -26,6 +26,10 @@
     "web": {
       "favicon": "./assets/favicon.png"
     },
+    "extra": {
+      "BIBLE_API_KEY": "1xFUzlS6wOHnkWWf0UqTj",
+      "BIBLE_ID":"de4e12af7f28f599-02"
+    },
     "plugins": [
       "expo-font"
     ]
