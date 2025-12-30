@@ -1,4 +1,8 @@
-import {View, Text, StyleSheet, Pressable} from 'react-native'
+import {View, Text, StyleSheet, Pressable, ActivityIndicator, ScrollView} from 'react-native'
+import { bookMap } from '../data/bookMap';
+import { getTodayReading } from '../utils/getTodayReading';
+import { fetchChapter } from '../services/bibleApi';
+import { useState, useEffect } from 'react';
 import { colors } from '../theme/colors';
 import ScriptureCard from '../components/ScriptureCard';
 import { useReading } from '../context/ReadingContext';
@@ -8,35 +12,79 @@ import { typography } from '../theme/typography';
 export default function ReadScreen (){
     const {completedToday, completeReading} = useReading();
     console.log('completedToday value:', completedToday, 'type:', typeof completedToday);
+
+
+    const [verses, setVerses] = useState<any[]>([]);
+const [loading, setLoading] = useState(true);
+
+useEffect(() => {
+  const loadScripture = async () => {
+    try {
+      const reading = await getTodayReading();
+      const bookId = bookMap[reading.book];
+
+      const data = await fetchChapter(bookId, reading.chapter);
+      setVerses(data.data);
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  loadScripture();
+  
+}, []);
+
+if (loading) {
+  return (
+    <View style={styles.loading}>
+      <ActivityIndicator color={colors.primary} />
+    </View>
+  );
+}
+
     return(
-        <View style={styles.container}>
-            <ScriptureCard reference="Genesis 1:1–5">
-              <Text style={styles.verse}>In the beginning God created the heaven and the earth.</Text>
-              <Text style={styles.verse}> And the earth was without form, and void; and darkness was upon the face of the deep...</Text>
-              <Text style={styles.verse}> And God said, Let there be light: and there was light</Text>
-            </ScriptureCard>
 
-            <View style={styles.statusRow}>
-              <Ionicons 
-              name={completedToday ? "checkmark-circle" : "time-outline"}
-              size={22}
-              color={completedToday ? colors.primary : colors.textSecondary}
-              />
-              <Text style={styles.statusText}> {completedToday ? "You have spent time in the Word today."
-               : "Take a moment with today’s Scripture."}</Text>
-            </View>
+        <ScrollView style={styles.container}>
+  {verses.map((verse) => (
+    <Text key={verse.id} style={styles.verse}>
+      <Text style={styles.verseNumber}>{verse.number} </Text>
+      {verse.text}
+    </Text>
+  ))}
+</ScrollView>
 
-            <Pressable style={[styles.completeButton, completedToday ? styles.completedButton : {},]} 
-            onPress={completeReading}
-            disabled={completedToday}>
-                <Ionicons
-                name={completedToday ? "heart" : "book"}
-                size={18}
-                color="#FFF"
-                />
-            <Text style={styles.completeButtonText}>{completedToday ? "Completed" : "Complete Reading"}</Text>
-            </Pressable>
-        </View>
+
+        
+        // <View style={styles.container}>
+        //     <ScriptureCard reference="Genesis 1:1–5">
+        //       <Text style={styles.verse}>In the beginning God created the heaven and the earth.</Text>
+        //       <Text style={styles.verse}> And the earth was without form, and void; and darkness was upon the face of the deep...</Text>
+        //       <Text style={styles.verse}> And God said, Let there be light: and there was light</Text>
+        //     </ScriptureCard>
+
+        //     <View style={styles.statusRow}>
+        //       <Ionicons 
+        //       name={completedToday ? "checkmark-circle" : "time-outline"}
+        //       size={22}
+        //       color={completedToday ? colors.primary : colors.textSecondary}
+        //       />
+        //       <Text style={styles.statusText}> {completedToday ? "You have spent time in the Word today."
+        //        : "Take a moment with today’s Scripture."}</Text>
+        //     </View>
+
+        //     <Pressable style={[styles.completeButton, completedToday ? styles.completedButton : {},]} 
+        //     onPress={completeReading}
+        //     disabled={completedToday}>
+        //         <Ionicons
+        //         name={completedToday ? "heart" : "book"}
+        //         size={18}
+        //         color="#FFF"
+        //         />
+        //     <Text style={styles.completeButtonText}>{completedToday ? "Completed" : "Complete Reading"}</Text>
+        //     </Pressable>
+        // </View>
     );
 }
 
@@ -46,12 +94,13 @@ const styles = StyleSheet.create({
         padding: 20,
         backgroundColor:colors.background
     },
-    verse:{
-        fontSize:16,
-        lineHeight:24,
-        marginBottom:12,
-        color:colors.textPrimary
-    },
+    verse: {
+    fontSize: 16,
+    fontFamily: typography.regular,
+    color: colors.textPrimary,
+    lineHeight: 26,
+    marginBottom: 12,
+  },
     progressText:{
         fontSize:14,
         color:colors.textSecondary,
@@ -87,5 +136,15 @@ const styles = StyleSheet.create({
         fontSize:14,
         fontFamily:typography.regular,
         color:colors.textSecondary
-    }
+    },
+    loading:{
+        flex: 1,
+        justifyContent: "center",
+        alignItems: "center",
+  },
+    verseNumber: {
+        fontSize: 12,
+        fontFamily: typography.medium,
+        color: colors.textSecondary,
+    },
 })
