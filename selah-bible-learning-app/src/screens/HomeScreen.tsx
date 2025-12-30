@@ -1,5 +1,6 @@
 import { View, Text, StyleSheet } from "react-native"
 import Card from "../components/card";
+import { useState, useEffect } from "react";
 import ActionButton from "../components/ActionButton";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../navigation/types";
@@ -7,12 +8,26 @@ import { colors } from "../theme/colors";
 import { useReading } from "../context/ReadingContext";
 import { Ionicons } from "@expo/vector-icons";
 import { typography } from "../theme/typography";
+import TodayReadingCard from "../components/TodayReadingCard";
+import { getTodayReading } from "../utils/getTodayReading";
 
 type Props = NativeStackScreenProps<RootStackParamList, 'Home'>;
 
 export default function HomeScreen({navigation}: Props) {
 
     const {streak} = useReading()
+
+    const [todayReading, setTodayReading] = useState<any>(null);
+
+useEffect(() => {
+  const load = async () => {
+    const reading = await getTodayReading();
+    setTodayReading(reading);
+  };
+
+  load();
+}, []);
+
   return(
     <View style={styles.container}>
         <View style={styles.header}>
@@ -35,12 +50,15 @@ export default function HomeScreen({navigation}: Props) {
             )}
         </View>
 
-        <Card>
-            <Text style={styles.cardTitle}>
-                Today's Reading
-            </Text>
-            <Text style={styles.cardText}>Start today's bible reading and keep your streak alive!</Text>
-        </Card>
+        {todayReading && (
+  <TodayReadingCard
+    book={todayReading.book}
+    chapter={todayReading.chapter}
+    testament={todayReading.testament}
+    onPress={() => navigation.navigate("Read")}
+  />
+)}
+
 
         <View style={styles.actions}>
             <ActionButton 
