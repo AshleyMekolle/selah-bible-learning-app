@@ -10,13 +10,13 @@ export type Reflection ={
 export async function saveReflection(reflection:Reflection) {
     try{
         const existing = await AsyncStorage.getItem(STORAGE_KEY);
-        const refelections = existing ? JSON.parse(existing) : {};
+        const reflections = existing ? JSON.parse(existing) : {};
 
-        refelections[refelections.date] = reflection;
+        reflections[reflections.date] = reflection;
 
-        await AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(refelections));
+        await AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(reflections));
     }catch (error){
-        console.error("Failed to save refelection", error)
+        console.error("Failed to save reflection", error)
     }
 }
 
@@ -30,25 +30,25 @@ export async function getReflectionbyDate(date: string) {
         return refelections[date] || null;
 
     }catch (error){
-        console.error("Failed to load refelection", error)
+        console.error("Failed to load reflection", error)
         return null;
     }
 }
 
-export async function getAllReflections() {
-    try{
+export async function getAllReflections(): Promise<Reflection[]> {
+    try {
         const existing = await AsyncStorage.getItem(STORAGE_KEY);
 
-        if(!existing) return [];
+        if (!existing) return [];
 
-        const refelectionsMap = JSON.parse(existing);
-
-        return Object.values(refelectionsMap).sort(
-            (a: any, b: any) => b.date.localeCompare(a.date)
+        const reflectionsMap: Record<string, Reflection> = JSON.parse(existing);
+        
+        return Object.values(reflectionsMap).sort((a, b) => 
+            b.date.localeCompare(a.date)
         );
 
-    }catch (error){
-        console.error("Failed to load refelections", error)
+    } catch (error) {
+        console.error("Failed to load reflections", error);
         return [];
     }
 }

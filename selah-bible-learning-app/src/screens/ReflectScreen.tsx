@@ -7,9 +7,12 @@ import { typography } from '../theme/typography';
 import { Ionicons } from '@expo/vector-icons';
 import Card from '../components/card';
 import ActionButton from '../components/ActionButton';
+import { RootStackParamList } from '../navigation/types';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
 
-export default function ReflectScreen (){
+type Props = NativeStackScreenProps<RootStackParamList, 'Reflect'>;
 
+export default function ReflectScreen ({navigation} : Props){
     const [text, setText] = useState("");
     const [saved, setSaved] = useState(false);
 
@@ -42,7 +45,7 @@ export default function ReflectScreen (){
         <View style={styles.container}>
             <Text style={styles.title}>Reflect</Text>
             <Text style={styles.subtitle}>
-        Take a moment to respond to today’s Scripture.
+        Take a moment to respond to today's Scripture.
       </Text>
 
       <Card>
@@ -68,6 +71,8 @@ export default function ReflectScreen (){
           onChangeText={setText}
         />
       </Card>
+
+       <View style={styles.actions}>
       <ActionButton
         label="Save Reflection"
         iconName="heart-outline"
@@ -79,6 +84,15 @@ export default function ReflectScreen (){
             Reflection saved quietly.
         </Text>
         )}
+
+       
+
+      <ActionButton
+        label="Reflection History"
+        iconName="create-outline"
+        onPress={() => navigation.navigate("ReflectionHistory")}
+      />
+      </View>
 
         </View>
     );
@@ -125,5 +139,10 @@ const styles = StyleSheet.create({
         fontFamily:typography.regular,
         color:colors.textSecondary,
         textAlign:"center"
-    }
+    },
+    actions: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        gap: 12,
+    },
 })

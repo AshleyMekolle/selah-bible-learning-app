@@ -16,7 +16,7 @@ export default function AppNavigator() {
             <Stack.Screen name="Home" component={HomeScreen as any}/>
             <Stack.Screen name="Progress" component={ProgressScreen}/>
             <Stack.Screen name="Profile" component={ProfileScreen}/>
-            <Stack.Screen name="Reflect" component={ReflectScreen}/>
+            <Stack.Screen name="Reflect" component={ReflectScreen as any}/>
             <Stack.Screen name="Read" component={ReadScreen}/>
             <Stack.Screen name="Study" component={StudyScreen}/>
             <Stack.Screen name="ReflectionHistory" component={ReflectionHistoryScreen}/>
