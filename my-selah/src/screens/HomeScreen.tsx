@@ -40,13 +40,12 @@ export default function HomeScreen({navigation}: Props) {
       contentContainerStyle={styles.content}
       showsVerticalScrollIndicator={false}
     >
-       {/* Header with Greeting */}
+
        <View style={styles.header}>
          <Text style={styles.greeting}>{getGreeting()}</Text>
          <Text style={styles.subGreeting}>Let's spend time in the Word</Text>
        </View>
 
-       {/* Status Card */}
        <Card>
          <View style={styles.cardHeader}>
            <View style={styles.statusIndicator}>
@@ -67,7 +66,6 @@ export default function HomeScreen({navigation}: Props) {
          </View>
        </Card>
 
-       {/* Reading Card */}
        {todayReading && (
          <TodayReadingCard
            book={todayReading.book}
@@ -76,8 +74,6 @@ export default function HomeScreen({navigation}: Props) {
            onPress={() => navigation.navigate("Read")}
          />
        )}
-
-       {/* Actions Section */}
        <View style={styles.actionsSection}>
          <Text style={styles.sectionLabel}>QUICK ACTIONS</Text>
          <View style={styles.actions}>
@@ -99,7 +95,6 @@ export default function HomeScreen({navigation}: Props) {
          </View>
        </View>
 
-       {/* Encouragement Card */}
        <View style={styles.encouragement}>
          <Text style={styles.encouragementIcon}>
             <Ionicons name="sparkles" size={24} color={colors.primary}/>
