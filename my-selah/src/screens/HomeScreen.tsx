@@ -15,7 +15,8 @@ type Props = NativeStackScreenProps<RootStackParamList, 'Home'>;
 
 export default function HomeScreen({navigation}: Props) {
 
-    const {streak} = useReading()
+    const { completedToday } = useReading();
+
 
     const [todayReading, setTodayReading] = useState<any>(null);
 
@@ -30,25 +31,24 @@ useEffect(() => {
 
   return(
     <View style={styles.container}>
-        <View style={styles.header}>
-            <Text style={styles.greeting}>Good Morning!</Text>
-            {streak === 0 ? (
-                <Text style={styles.emptyStreakText}>
-                    A gentle start is a great start beloved
-                </Text>
-            ) : (
-                <View style={styles.streakBadge}>
-                    <Ionicons
-                        name="flame"
-                        size={20}
-                        color={colors.accent}
-                    />
-                    <Text style={styles.streakText}>
-                        {streak} day{streak !== 1 ? "s" : ""}
-                    </Text>
-                </View>
-            )}
-        </View>
+       <Card>
+  <View style={styles.cardHeader}>
+    <Ionicons
+      name={completedToday ? "checkmark-circle" : "book-outline"}
+      size={20}
+      color={completedToday ? colors.primary : colors.textSecondary}
+    />
+    <Text style={styles.cardTitle}>Today’s Reading</Text>
+  </View>
+
+  <Text style={styles.cardText}>
+    {completedToday
+      ? "You’ve already spent time in the Word today."
+      : "Set aside a quiet moment for today’s Scripture."}
+  </Text>
+
+
+</Card>
 
         {todayReading && (
   <TodayReadingCard
@@ -139,6 +139,13 @@ const styles = StyleSheet.create({
         color: colors.textSecondary,
         lineHeight: 22,
     },
+    cardHeader: {
+        flexDirection: "row",
+        alignItems: "center",
+        gap: 8,
+        marginBottom: 8,
+        },
+
     actions: {
         flexDirection: 'row',
         justifyContent: 'space-between',
