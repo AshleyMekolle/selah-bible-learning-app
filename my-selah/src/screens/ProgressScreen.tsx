@@ -16,7 +16,6 @@ export default function ProgressScreen() {
       contentContainerStyle={styles.content}
       showsVerticalScrollIndicator={false}
     >
-      {/* Header */}
       <View style={styles.header}>
         <Text style={styles.title}>Your Journey</Text>
         <Text style={styles.subtitle}>
@@ -24,7 +23,6 @@ export default function ProgressScreen() {
         </Text>
       </View>
 
-      {/* Streak Card - Hero */}
       <View style={styles.streakHero}>
         <View style={styles.streakIconContainer}>
           <Ionicons
@@ -48,7 +46,6 @@ export default function ProgressScreen() {
         </View>
       </View>
 
-      {/* This Week Card */}
       <View style={styles.weekCard}>
       <Card >
         <View style={styles.cardHeader}>
