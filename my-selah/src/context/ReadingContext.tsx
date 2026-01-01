@@ -36,6 +36,16 @@ export function ReadingProvider ({children} : {children: ReactNode}){
                     setStreak(Number(storedStreak));
                 }
 
+                if (storedDate) {
+                    const yesterday = new Date();
+                    yesterday.setDate(yesterday.getDate() - 1);
+                    const yesterdayStr = yesterday.toISOString().split("T")[0];
+
+                    if (storedDate !== today && storedDate !== yesterdayStr) {
+                        setStreak(0);
+                    }
+               }
+
                 if (storedDate === today && storedCompleted === "true"){
                 setCompletedToday(true);
                 }else{
@@ -61,18 +71,31 @@ export function ReadingProvider ({children} : {children: ReactNode}){
         AsyncStorage.setItem(STORAGE_KEYS.completedToday, completedToday.toString());
     }, [completedToday])
 
-    const completeReading = async () =>{
-        if (!completedToday){
-            const today = getToday();
-            setCompletedToday(true);
-            setStreak((prev) => prev + 1)
+    const completeReading = async () => {
+  if (completedToday) return;
 
-            await AsyncStorage.setItem(
-                STORAGE_KEYS.lastCompletedDate,
-                today
-            )
-        }
-    };
+  const today = getToday();
+  const lastDate = await AsyncStorage.getItem(
+    STORAGE_KEYS.lastCompletedDate
+  );
+
+  let newStreak = 1;
+
+  if (lastDate) {
+    const yesterday = new Date();
+    yesterday.setDate(yesterday.getDate() - 1);
+    const yesterdayStr = yesterday.toISOString().split("T")[0];
+
+    if (lastDate === yesterdayStr) {
+      newStreak = streak + 1;
+    }
+  }
+
+  setCompletedToday(true);
+  setStreak(newStreak);
+
+  await AsyncStorage.setItem(STORAGE_KEYS.lastCompletedDate, today);
+};
 
     const getToday = () =>{
         return new Date().toISOString().split("T")[0];
