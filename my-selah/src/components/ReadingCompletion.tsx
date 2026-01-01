@@ -24,6 +24,19 @@ export default function ReadingCompletion ({completed, onComplete}: Props){
             </View>
         )
     }
+
+    return(
+        <Pressable style={styles.button} onPress={onComplete}>
+            <Ionicons
+            name="book"
+            size={18}
+            color="#FFF"
+            />
+            <Text style={styles.buttonText}>
+                Mark as Read
+            </Text>
+        </Pressable>
+    )
 }
 
 const styles = StyleSheet.create({
