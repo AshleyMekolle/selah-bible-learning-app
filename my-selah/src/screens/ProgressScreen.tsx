@@ -8,28 +8,32 @@ import { act } from "react";
 
 export default function ProgressScreen() {
   const {streak} = useReading()
+
+    if (streak === 0){
+      <Text style={styles.streakText}>
+  Begin your reading rhythm today.
+</Text>
+
+    }
   return(
+  
     <View style={styles.container}>
         <Text style={styles.title}>Your Journey</Text>
         <Text style={styles.subtitle}>
         Every moment in the Word is meaningful.
       </Text>
 
-      <Card>
-        <View style={styles.streakRow}>
-         <Ionicons
-         name="flame-outline"
-         size={22}
-         color={colors.primary}
-         />
-         <Text style={styles.streakValue}>
-            {streak} faithful day{streak !== 1 ? "s" : ""}
-          </Text>
-        </View>
-        <Text style={styles.streakDescription}>
-          You have been showing up consistently.
-        </Text>
-      </Card>
+ <View style={styles.streakCard}>
+  <Ionicons
+    name="flame-outline"
+    size={20}
+    color={colors.primary}
+  />
+  <Text style={styles.streakText}>
+    {streak} day{streak === 1 ? "" : "s"} of consistent reading
+  </Text>
+</View>
+
 
       <Card>
         <Text style={styles.sectionTitle}>This Week </Text>
@@ -133,5 +137,20 @@ const styles = StyleSheet.create({
     fontSize:14,
     fontFamily: typography.regular,
     color:colors.textPrimary
-  }
+  },
+  streakCard: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 8,
+    padding: 16,
+    borderRadius: 14,
+    backgroundColor: colors.surface,
+    marginBottom: 24,
+},
+  streakText: {
+      fontSize: 14,
+      fontFamily: typography.regular,
+      color: colors.textPrimary,
+  },
+
 })
