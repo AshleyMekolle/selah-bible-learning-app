@@ -1,5 +1,7 @@
 export const typography = {
-  regular:"Inter_400Regular",
-  medium:"Inter_500Medium",
-  semibold:"Inter_600SemiBold"
-}
+  regular: "Poppins_400Regular",
+  medium: "Poppins_500Medium",
+  semibold: "Poppins_600SemiBold",
+  bold: "Poppins_700Bold",
+  light: "Poppins_300Light",
+};
