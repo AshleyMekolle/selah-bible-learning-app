@@ -11,6 +11,7 @@ import { typography } from '../theme/typography';
 import { mockScripture } from '../mocks/scripture';
 import VerseItem from '../components/VerseItem';
 import FadeInView from '../components/FadeInView';
+import ReadingCompletion from '../components/ReadingCompletion';
 
 export default function ReadScreen (){
     const {completedToday, completeReading} = useReading();
@@ -45,49 +46,8 @@ if (loading) {
 }
 
     return(
-
-//         <ScrollView style={styles.container}>
-//   {verses.map((verse) => (
-//     <Text key={verse.id} style={styles.verse}>
-//       <Text style={styles.verseNumber}>{verse.number} </Text>
-//       {verse.text}
-//     </Text>
-//   ))}
-
-//   <View style={styles.statusRow}>
-//          <Ionicons 
-//              name={completedToday ? "checkmark-circle" : "time-outline"}
-//          size={22}
-//              color={completedToday ? colors.primary : colors.textSecondary}
-//             />
-//             <Text style={styles.statusText}> {completedToday ? "You have spent time in the Word today."
-//              : "Take a moment with today’s Scripture."}</Text>
-//             </View>
-
-//            <Pressable style={[styles.completeButton, completedToday ? styles.completedButton : {},]} 
-//            onPress={completeReading}
-//           disabled={completedToday}>
-//                <Ionicons
-//                name={completedToday ? "heart" : "book"}
-//                size={18}
-//                 color="#FFF"
-//                 />
-//              <Text style={styles.completeButtonText}>{completedToday ? "Completed" : "Complete Reading"}</Text>
-//              </Pressable>
-// </ScrollView>
-
-
     <View style={styles.container}>
-      {/* <ScriptureCard reference={mockScripture.reference}>
-        {mockScripture.verses.map((verse) => (
-          <Text key={verse.id} style={styles.verse}>
-            <Text style={styles.verseNumber}>{verse.number}. </Text>
-            {verse.text}
-          </Text>
-        ))}
-      </ScriptureCard> */}
-
-      <ScriptureCard reference={mockScripture.reference}>
+  <ScriptureCard reference={mockScripture.reference}>
 
       <FadeInView>
   {verses.map((verse) => (
@@ -100,7 +60,13 @@ if (loading) {
 </FadeInView>
 </ScriptureCard>
 
+<ReadingCompletion
+  completed={completedToday}
+  onComplete={completeReading}
+/>
 
+
+{/* 
       <View style={styles.statusRow}>
         <Ionicons
           name={completedToday ? "checkmark-circle" : "time-outline"}
@@ -128,7 +94,7 @@ if (loading) {
         <Text style={styles.completeButtonText}>
           {completedToday ? "Completed" : "Complete Reading"}
         </Text>
-      </Pressable>
+      </Pressable> */}
     </View>
     );
 }
