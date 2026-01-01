@@ -29,12 +29,12 @@ export default function TodayReadingCard({book, chapter, testament, onPress}: Pr
       <Text style={styles.reading}>
         {book} {chapter}
       </Text>
-
+{/* 
       <ActionButton
         label="Read"
         iconName="arrow-forward-outline"
         onPress={onPress}
-      />
+      /> */}
     </Card>
     )
 }

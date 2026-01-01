@@ -52,7 +52,7 @@ export default function HomeScreen({navigation}: Props) {
              <Ionicons
                name={completedToday ? "checkmark-circle" : "book-outline"}
                size={24}
-               color={completedToday ? colors.primary : colors.accent}
+               color={completedToday ? colors.primary : colors.textSecondary}
              />
            </View>
            <View style={styles.statusTextContainer}>
