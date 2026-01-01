@@ -9,6 +9,8 @@ import { useReading } from '../context/ReadingContext';
 import { Ionicons } from '@expo/vector-icons';
 import { typography } from '../theme/typography';
 import { mockScripture } from '../mocks/scripture';
+import VerseItem from '../components/VerseItem';
+import FadeInView from '../components/FadeInView';
 
 export default function ReadScreen (){
     const {completedToday, completeReading} = useReading();
@@ -76,14 +78,28 @@ if (loading) {
 
 
     <View style={styles.container}>
-      <ScriptureCard reference={mockScripture.reference}>
+      {/* <ScriptureCard reference={mockScripture.reference}>
         {mockScripture.verses.map((verse) => (
           <Text key={verse.id} style={styles.verse}>
             <Text style={styles.verseNumber}>{verse.number}. </Text>
             {verse.text}
           </Text>
         ))}
-      </ScriptureCard>
+      </ScriptureCard> */}
+
+      <ScriptureCard reference={mockScripture.reference}>
+
+      <FadeInView>
+  {verses.map((verse) => (
+    <VerseItem
+      key={verse.id}
+      number={verse.number}
+      text={verse.text}
+    />
+  ))}
+</FadeInView>
+</ScriptureCard>
+
 
       <View style={styles.statusRow}>
         <Ionicons
