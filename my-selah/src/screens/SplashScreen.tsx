@@ -11,29 +11,24 @@ type Props = NativeStackScreenProps<RootStackParamList, 'Splash'>;
 const { width } = Dimensions.get('window');
 
 export default function SplashScreen({ navigation }: Props) {
-  // Animation values
   const fadeAnim = useRef(new Animated.Value(0)).current;
   const scaleAnim = useRef(new Animated.Value(0.3)).current;
   const slideAnim = useRef(new Animated.Value(50)).current;
   const pulseAnim = useRef(new Animated.Value(1)).current;
 
   useEffect(() => {
-    // Start animations
     Animated.parallel([
-      // Fade in
       Animated.timing(fadeAnim, {
         toValue: 1,
         duration: 1000,
         useNativeDriver: true,
       }),
-      // Scale up icon
       Animated.spring(scaleAnim, {
         toValue: 1,
         tension: 20,
         friction: 7,
         useNativeDriver: true,
       }),
-      // Slide up text
       Animated.timing(slideAnim, {
         toValue: 0,
         duration: 800,
@@ -42,7 +37,6 @@ export default function SplashScreen({ navigation }: Props) {
       }),
     ]).start();
 
-    // Pulse animation loop
     Animated.loop(
       Animated.sequence([
         Animated.timing(pulseAnim, {
@@ -57,8 +51,6 @@ export default function SplashScreen({ navigation }: Props) {
         }),
       ])
     ).start();
-
-    // Navigate to Home after 5 seconds
     const timer = setTimeout(() => {
       navigation.replace('Home');
     }, 5000);
@@ -68,11 +60,8 @@ export default function SplashScreen({ navigation }: Props) {
 
   return (
     <View style={styles.container}>
-      {/* Background Gradient Effect */}
       <View style={styles.backgroundCircle1} />
       <View style={styles.backgroundCircle2} />
-
-      {/* Main Content */}
       <Animated.View
         style={[
           styles.content,
@@ -82,7 +71,6 @@ export default function SplashScreen({ navigation }: Props) {
           },
         ]}
       >
-        {/* Icon Container */}
         <Animated.View
           style={[
             styles.iconContainer,
@@ -94,7 +82,6 @@ export default function SplashScreen({ navigation }: Props) {
           <Ionicons name="book-outline" size={72} color={colors.primary} />
         </Animated.View>
 
-        {/* App Name & Tagline */}
         <Animated.View
           style={[
             styles.textContainer,
@@ -109,7 +96,6 @@ export default function SplashScreen({ navigation }: Props) {
         </Animated.View>
       </Animated.View>
 
-      {/* Bottom Section */}
       <Animated.View
         style={[
           styles.bottomSection,
@@ -138,8 +124,6 @@ const styles = StyleSheet.create({
     position: 'relative',
     overflow: 'hidden',
   },
-
-  // Background Gradient Circles
   backgroundCircle1: {
     position: 'absolute',
     width: width * 1.5,
@@ -158,8 +142,6 @@ const styles = StyleSheet.create({
     bottom: -width * 0.4,
     right: -width * 0.3,
   },
-
-  // Main Content
   content: {
     alignItems: 'center',
     justifyContent: 'center',
@@ -199,7 +181,6 @@ const styles = StyleSheet.create({
     letterSpacing: 1,
   },
 
-  // Bottom Section
   bottomSection: {
     position: 'absolute',
     bottom: 60,
