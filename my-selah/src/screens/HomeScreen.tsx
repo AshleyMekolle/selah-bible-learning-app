@@ -83,7 +83,7 @@ export default function HomeScreen({navigation}: Props) {
              onPress={() => navigation.navigate('Read')}
            />
            <ActionButton 
-             label="Study" 
+             label="Progress" 
              iconName="school-outline"
              onPress={() => navigation.navigate('Progress')}
            />
