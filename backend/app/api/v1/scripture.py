@@ -1,23 +1,13 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, Query
 from app.schemas.scripture import ScriptureResponse
+from app.services.bible_service import BibleService
 
 router=APIRouter()
+bible_service = BibleService()
 
 @router.get("/", response_model=ScriptureResponse)
-def get_scripture():
-    return{
-        "reference":{
-            "book": "Genesis",
-            "chapter": 1
-        },
-        "verses":[
-            {
-                "id": "GEN.1.1",
-                "book": "Genesis",
-                "chapter": 1,
-                "verse": 1,
-                "text": "In the beginning God created the heaven and the earth"
-            }
-        ],
-        "translation": "KJV"
-    }
+def get_scripture(
+    book: str= Query(..., example="Genesis"),
+    chapter: int = Query(..., ge=1)
+):
+    return bible_service.get_chapter(book, chapter)
