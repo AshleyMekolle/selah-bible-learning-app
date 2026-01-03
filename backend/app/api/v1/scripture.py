@@ -6,8 +6,8 @@ router=APIRouter()
 bible_service = BibleService()
 
 @router.get("/", response_model=ScriptureResponse)
-def get_scripture(
+async def get_scripture(
     book: str= Query(..., example="Genesis"),
     chapter: int = Query(..., ge=1)
 ):
-    return bible_service.get_chapter(book, chapter)
+    return await bible_service.get_chapter(book, chapter)

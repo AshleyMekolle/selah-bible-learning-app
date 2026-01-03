@@ -1,5 +1,6 @@
 from app.schemas.scripture import ScriptureResponse
 from app.core.settings import settings
+from fastapi import HTTPException
 
 class BibleService:
     BASE_URL = "https://api.scripture.api.bible/v1"
@@ -35,3 +36,8 @@ class BibleService:
             verses = verses,
             translation="KJV"
         )
+        if response.status_code != 200:
+    raise HTTPException(
+        status_code=502,
+        detail="Scripture could not be retrieved at this time."
+    )
