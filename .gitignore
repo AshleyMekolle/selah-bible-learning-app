@@ -1,0 +1,11 @@
+
+*.log
+*.env
+
+# Folder and everything inside
+myselah/node_modules/
+selah-bible-learning-app/node_modules/
+.expo/
+
+# Pattern
+.DS_Store
