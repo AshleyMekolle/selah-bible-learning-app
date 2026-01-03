@@ -1,16 +1,10 @@
 from fastapi import APIRouter
 from app.schemas.reading_plan import ReadingPlanListResponse
+from app.services.reading_plan_service import ReadingPlanService
 
 router = APIRouter()
+service = ReadingPlanService()
 
 @router.get("/", response_model=ReadingPlanListResponse)
 def list_reading_plans():
-    return {"plans": [
-        {
-            "id": "selah",
-            "title": "Foundations",
-            "description": "A calm journey through the Scripture",
-            "durationDays": 30
-        }
-    ]
-}
+    return service.list_plans()
