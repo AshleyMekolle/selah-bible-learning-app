@@ -1,27 +1,37 @@
 from app.schemas.scripture import ScriptureResponse
+from app.core.settings import settings
 
 class BibleService:
-    def get_chapter(self, book: str, chapter: int) -> ScriptureResponse:
+    BASE_URL = "https://api.scripture.api.bible/v1"
+   async def get_chapter(self, book: str, chapter: int) -> ScriptureResponse:
+        chapter_id = f"{book[:3].upper()}.{chapter}"
+
+        headers ={
+            "api-key": settings.bible_api_key
+        }
+
+        url = f"{self.BASE_URL}/bibles/{settings.bible_id}/chapters/{chapter_id}/verses"
+
+        async with httpx.AsyncClient() as client:
+            response = await client.get(url, headers=headers)
+            response.raise_for_status()
+            data = response.json()
+
+        verses = []
+        for v in data["data"]:
+            verses.append({
+                "id": v["id"],
+                "book": book,
+                "chapter": chapter,
+                "verse": int(v["id"].split(".")[-1]),
+                "text": v["content"].replace("<p>", "").replace("</p>", "")
+            })
+
         return ScriptureResponse(
             reference={
                 "book": book,
                 "chapter": chapter
             },
-            verses=[
-                {
-                    "id": "GEN.1.1",
-                    "book": book,
-                    "chapter": chapter,
-                    "verse": 1,
-                    "text": "In the beginning God created the heaven and the earth."
-                },
-                {
-                    "id": "GEN.1.2",
-                    "book": book,
-                    "chapter": chapter,
-                    "verse": 2,
-                    "text": "And the earth was without form, and void; and darkness was upon the face of the deep."
-                }
-            ],
+            verses = verses,
             translation="KJV"
         )
