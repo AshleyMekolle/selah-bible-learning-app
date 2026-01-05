@@ -1,0 +1,9 @@
+{
+  "1": { "book": "Genesis", "chapter": 1 },
+  "2": { "book": "Genesis", "chapter": 2 },
+  "3": { "book": "Genesis", "chapter": 3 },
+  "4": { "book": "Genesis", "chapter": 4 },
+  "5": { "book": "Genesis", "chapter": 5 },
+
+  "46": { "book": "Genesis", "chapter": 46 }
+}
