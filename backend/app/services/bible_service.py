@@ -1,43 +1,52 @@
-from app.schemas.scripture import ScriptureResponse
-from app.core.settings import settings
-from fastapi import HTTPException
+import httpx
+import asyncio
+
+class BibleServiceError(Exception):
+    pass
+
 
 class BibleService:
-    BASE_URL = "https://api.scripture.api.bible/v1"
-   async def get_chapter(self, book: str, chapter: int) -> ScriptureResponse:
-        chapter_id = f"{book[:3].upper()}.{chapter}"
+    BASE_URL = "https://bible-api.com"
+    TIMEOUT = 15.0
+    MAX_RETRIES = 3
 
-        headers ={
-            "api-key": settings.bible_api_key
-        }
+    async def get_chapter(self, book: str, chapter: int):
+        url = f"{self.BASE_URL}/{book} {chapter}"
 
-        url = f"{self.BASE_URL}/bibles/{settings.bible_id}/chapters/{chapter_id}/verses"
+        last_exception = None
 
-        async with httpx.AsyncClient() as client:
-            response = await client.get(url, headers=headers)
-            response.raise_for_status()
-            data = response.json()
+        for attempt in range(1, self.MAX_RETRIES + 1):
+            try:
+                async with httpx.AsyncClient(timeout=self.TIMEOUT) as client:
+                    response = await client.get(url)
 
-        verses = []
-        for v in data["data"]:
-            verses.append({
-                "id": v["id"],
-                "book": book,
-                "chapter": chapter,
-                "verse": int(v["id"].split(".")[-1]),
-                "text": v["content"].replace("<p>", "").replace("</p>", "")
-            })
+                if response.status_code != 200:
+                    raise BibleServiceError(
+                        f"Upstream returned {response.status_code}"
+                    )
 
-        return ScriptureResponse(
-            reference={
-                "book": book,
-                "chapter": chapter
-            },
-            verses = verses,
-            translation="KJV"
-        )
-        if response.status_code != 200:
-    raise HTTPException(
-        status_code=502,
-        detail="Scripture could not be retrieved at this time."
-    )
+                data = response.json()
+
+                return {
+                    "book": data["book_name"],
+                    "chapter": data["chapter"],
+                    "translation": data["translation_name"],
+                    "verses": [
+                        {
+                            "verse": v["verse"],
+                            "text": v["text"].strip()
+                        }
+                        for v in data["verses"]
+                    ]
+                }
+
+            except (httpx.TimeoutException, httpx.ConnectError) as e:
+                last_exception = e
+                await asyncio.sleep(1.5 * attempt)  # backoff
+            except Exception as e:
+                last_exception = e
+                break
+
+        raise BibleServiceError(
+            "Scripture service is temporarily unavailable. Please try again later."
+        ) from last_exception
