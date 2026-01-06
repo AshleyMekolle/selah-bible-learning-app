@@ -15,20 +15,26 @@ class DevotionService:
             "selah_reflection": None
         })
     
+    def load_scripture_for_day(self, day: int) -> dict:
+        return {
+            "reference": f"John {day}:1-10",
+            "verses": [
+                {"id": i, "number": i, "text": f"Verse {i} for day {day}. This is the word of God."}
+                for i in range(1, 21)
+            ]
+        }
+    
     def get_day_reading(self, day: int, start: int, limit: int):
-        scripture = self._load_scripture_for_day(day)
-
+        scripture = self.load_scripture_for_day(day)
         verses = scripture["verses"]
         total = len(verses)
-
         paginated = verses[start - 1 : start - 1 + limit]
-
         scripture["verses"] = paginated
         scripture["pagination"] = {
             "start": start,
             "limit": limit,
             "total": total,
-            "has_more": start - 1 + limit < total
+            "has_more": start - 1 + limit < total,
+            "reference": scripture["reference"]
         }
-
         return scripture
