@@ -1,7 +1,7 @@
 import {View, Text, StyleSheet, Pressable, ActivityIndicator, ScrollView} from 'react-native'
 import { bookMap } from '../data/bookMap';
-import { getTodayReading } from '../utils/getTodayReading';
-import { fetchTodayScripture } from '../services/bibleService';
+import { getDayReading } from '../services/api';
+import { DayResponse } from '../navigation/api';
 import { useState, useEffect } from 'react';
 import { colors } from '../theme/color';
 import ScriptureCard from '../components/ScriptureCard';
@@ -12,52 +12,68 @@ import { mockScripture } from '../mocks/scripture';
 import VerseItem from '../components/VerseItem';
 import FadeInView from '../components/FadeInView';
 import ReadingCompletion from '../components/ReadingCompletion';
-import { getDayReading } from '../services/api';
 
 export default function ReadScreen (){
-    const {completedToday, completeReading} = useReading();
-    const [verses, setVerses] = useState<any[]>([]);
-    const [loading, setLoading] = useState(true);
-    const [pagination, setPagination] = useState<any>(null);
-    const [day, setDay] = useState<number | null>(null);
+  const { completedToday, completeReading } = useReading();
+
+  const [verses, setVerses] = useState<any[]>([]);
+  const [pagination, setPagination] = useState<any>(null);
+  const [day, setDay] = useState<number>(1);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const load = async () => {
+      try {
+        const data = await getDayReading(1); 
+        setDay(data.meta.day);
+        setVerses(data?.content?.scripture?.verses ?? []);
+        setPagination(data?.content?.scripture?.pagination ?? null);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    load();
+  }, []);
 
 
-useEffect(() => {
-  const load = async () => {
-    try {
-      const data = await getTodayReading();
-      setDay(data.meta.day);
-      setVerses(data.content.scripture.verses);
-      setPagination(data.content.scripture.pagination);
-    } finally {
-      setLoading(false);
-    }
-  };
+// useEffect(() => {
+//   const load = async () => {
+//     try {
+//       const data = await getTodayReading();
+//       setDay(data.meta.day);
+//       setVerses(data.content.scripture.verses);
+//       setPagination(data.content.scripture.pagination);
+//     } finally {
+//       setLoading(false);
+//     }
+//   };
 
-  load();
-}, []);
+//   load();
+// }, []);
 
 
-useEffect(() => {
-  const loadScripture = async () => {
-    try {
-      const data = await fetchTodayScripture();
-      setVerses(data.verses);
-    } catch (error) {
-      console.error(error);
-    } finally {
-      setLoading(false);
-    }
-  };
+// useEffect(() => {
+//   const loadScripture = async () => {
+//     try {
+//       const data = await fetchTodayScripture();
+//       setVerses(data.verses);
+//     } catch (error) {
+//       console.error(error);
+//     } finally {
+//       setLoading(false);
+//     }
+//   };
 
-  loadScripture();
-}, []);
+//   loadScripture();
+// }, []);
 
 const loadMore = async () => {
   if (!pagination?.has_more || !day) return;
 
+  const PAGE_SIZE = 10;
   const nextStart = pagination.start + pagination.limit;
-  const data = await getDayReading(day, nextStart);
+  const data = await getDayReading(day, nextStart, PAGE_SIZE);
 
   setVerses(prev => [...prev, ...data.content.scripture.verses]);
   setPagination(data.content.scripture.pagination);
@@ -74,7 +90,7 @@ if (loading) {
 
     return(
     <View style={styles.container}>
-  <ScriptureCard reference={mockScripture.reference}>
+  <ScriptureCard reference={pagination?.reference ?? ""}>
 
       <FadeInView>
   {verses.map((verse) => (
@@ -85,6 +101,13 @@ if (loading) {
     />
   ))}
 </FadeInView>
+
+<Pressable onPress={loadMore} disabled={!pagination?.has_more}>
+  <Text style={{ textAlign: "center", marginVertical: 12 }}>
+    {pagination?.has_more ? "Load more" : "End of chapter"}
+  </Text>
+</Pressable>
+
 </ScriptureCard>
 
 <ReadingCompletion
