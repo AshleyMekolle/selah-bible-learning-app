@@ -13,5 +13,16 @@ export async function getDayReading(
     throw new Error("Failed to fetch day reading");
   }
 
-  return res.json();
+  const data = await res.json();
+  
+  return {
+    meta: data.meta,
+    content: {
+      scripture: {
+        reference: data.content.reference,
+        verses: data.content.verses,
+        pagination: data.content.pagination
+      }
+    }
+  };
 }
