@@ -14,3 +14,21 @@ class DevotionService:
             "tags": [],
             "selah_reflection": None
         })
+    
+    def get_day_reading(self, day: int, start: int, limit: int):
+        scripture = self._load_scripture_for_day(day)
+
+        verses = scripture["verses"]
+        total = len(verses)
+
+        paginated = verses[start - 1 : start - 1 + limit]
+
+        scripture["verses"] = paginated
+        scripture["pagination"] = {
+            "start": start,
+            "limit": limit,
+            "total": total,
+            "has_more": start - 1 + limit < total
+        }
+
+        return scripture
