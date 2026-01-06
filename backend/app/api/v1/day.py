@@ -1,16 +1,16 @@
 from fastapi import APIRouter, Path, HTTPException
 from app.services.reading_plan_service import ReadingPlanService
 from app.services.devotion_service import DevotionService
-from app.services.bible_service import BibleSeervice
+from app.services.bible_service import BibleService
 
 router = APIRouter()
 
 reading_plan_service = ReadingPlanService()
 devotion_service = DevotionService()
-bible_service = BibleSeervice()
+bible_service = BibleService()
 
 
-@router.get("/day/{day}")
+@router.get("/{day}")
 async def get_day_reading(
     day: int = Path(..., ge=1, le=365, description="Day of the reading plan (1-365)")
 ):

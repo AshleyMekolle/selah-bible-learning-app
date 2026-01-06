@@ -1,5 +1,5 @@
 import json
-from pathlib import pathlib
+from pathlib import Path
 
 DATA_PATH = Path(__file__).resolve().parent.parent / "data" / "reading_plan.json"
 

@@ -1,7 +1,7 @@
 import json
 from pathlib import Path
 
-DATA_PATH = Path(__file__).resolve().parent.parent / "data" / "daily_devotion"
+DATA_PATH = Path(__file__).resolve().parent.parent / "data" / "daily_devotion.json"
 
 class DevotionService:
     def __init__(self):

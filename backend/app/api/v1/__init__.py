@@ -5,4 +5,4 @@ from app.api.v1.day import router as day_router
 router = APIRouter()
 
 router.include_router(scripture_router, prefix="/scripture", tags=["Scripture"])
-router.include_router(day_router, tags=["Day"])
+router.include_router(day_router, prefix="/day", tags=["Day"])

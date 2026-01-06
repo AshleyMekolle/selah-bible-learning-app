@@ -1,5 +1,5 @@
 from fastapi import APIRouter
-from app.api.v1 import scripture, reading_plans
+from app.api.v1 import scripture, reading_plans, day
 
 api_router = APIRouter()
 
@@ -13,4 +13,10 @@ api_router.include_router(
     reading_plans.router,
     prefix="/reading-plans",
     tags=["Reading Plans"]
+)
+
+api_router.include_router(
+    day.router,
+    prefix="/day",
+    tags=["Daily Plans"]
 )
