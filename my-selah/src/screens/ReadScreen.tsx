@@ -12,13 +12,30 @@ import { mockScripture } from '../mocks/scripture';
 import VerseItem from '../components/VerseItem';
 import FadeInView from '../components/FadeInView';
 import ReadingCompletion from '../components/ReadingCompletion';
+import { getDayReading } from '../services/api';
 
 export default function ReadScreen (){
     const {completedToday, completeReading} = useReading();
-
-
     const [verses, setVerses] = useState<any[]>([]);
-const [loading, setLoading] = useState(true);
+    const [loading, setLoading] = useState(true);
+    const [pagination, setPagination] = useState<any>(null);
+    const [day, setDay] = useState<number | null>(null);
+
+
+useEffect(() => {
+  const load = async () => {
+    try {
+      const data = await getTodayReading();
+      setDay(data.meta.day);
+      setVerses(data.content.scripture.verses);
+      setPagination(data.content.scripture.pagination);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  load();
+}, []);
 
 
 useEffect(() => {
@@ -35,6 +52,16 @@ useEffect(() => {
 
   loadScripture();
 }, []);
+
+const loadMore = async () => {
+  if (!pagination?.has_more || !day) return;
+
+  const nextStart = pagination.start + pagination.limit;
+  const data = await getDayReading(day, nextStart);
+
+  setVerses(prev => [...prev, ...data.content.scripture.verses]);
+  setPagination(data.content.scripture.pagination);
+};
 
 
 if (loading) {
