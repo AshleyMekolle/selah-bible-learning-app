@@ -6,7 +6,7 @@ router = APIRouter()
 
 START_DATE = date(2025,1,1)
 
-@router.get("/today")
+@router.get("/")
 async def get_today():
     today = date.today()
     day_number = (today - START_DATE).days + 1

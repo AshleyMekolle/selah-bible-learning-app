@@ -75,7 +75,7 @@ from app.services.devotion_service import DevotionService
 router = APIRouter()
 service = DevotionService()
 
-@router.get("/day/{day}")
+@router.get("/{day}")
 async def get_day_reading(
     day: int = Path(..., ge=1, le=365),
     start: int = Query(1, ge=1),
