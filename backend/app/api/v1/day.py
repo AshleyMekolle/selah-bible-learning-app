@@ -2,6 +2,7 @@ from fastapi import APIRouter, Path, HTTPException
 from app.services.reading_plan_service import ReadingPlanService
 from app.services.devotion_service import DevotionService
 from app.services.bible_service import BibleService
+from app.core.cache import get_cache, set_cache
 
 router = APIRouter()
 
@@ -23,17 +24,26 @@ async def get_day_reading(
 
         devotion = devotion_service.get_devotion_for_day(day)
 
-        return{
-            "day": day,
-            "reading": {
-                "book": book,
-                "chapter": chapter
-            },
-            "scripture": scripture,
-            "theme": devotion["theme"],
-            "tags": devotion["tags"],
-            "selah_reflection": devotion["selah_reflection"]
+        cache_key = f"day:{day}"
+        cached = get_cache(cache_key)
+        if cached:
+            return cached
+
+
+        response = {
+        "day": day,
+        "reading": {
+            "book": book,
+            "chapter": chapter
+        },
+        "scripture": scripture,
+        "theme": devotion["theme"],
+        "tags": devotion["tags"],
+        "selah_reflection": devotion["selah_reflection"]
         }
+
+        set_cache(cache_key, response)
+        return response
     except ValueError as e:
         raise HTTPException(status_code=404, detail=str(e))
     
@@ -42,3 +52,4 @@ async def get_day_reading(
             status_code = 502,
             detail ="Daily reading could not be retrieved at this time."
         )
+    

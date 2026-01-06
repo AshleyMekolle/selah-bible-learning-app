@@ -1,7 +1,7 @@
 import time
 
 _cache = {}
-TTL_SECONDS = 60 * 30  # 30 minutes
+TTL_SECONDS = 60 * 30  
 
 
 def get_cache(key: str):
