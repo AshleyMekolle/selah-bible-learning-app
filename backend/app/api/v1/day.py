@@ -12,6 +12,7 @@ async def get_day_reading(
     limit: int = Query(10, ge=1, le=50),
 ):
     content = service.get_day_reading(day, start, limit)
+    
     return {
         "meta": {
             "day": day,

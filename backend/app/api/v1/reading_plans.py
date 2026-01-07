@@ -1,19 +1,22 @@
 from fastapi import APIRouter
 from pydantic import BaseModel
 from datetime import datetime
+
+from app.schemas.reading_plan import ReadingPlanListResponse
 from app.services.reading_plan_service import ReadingPlanService
 
 router = APIRouter()
 service = ReadingPlanService()
 
-@router.get("/")
+@router.get("/", response_model=ReadingPlanListResponse)
 def list_reading_plans():
-    plans = service.list_plans()
-    return {"plans": plans, "count": len(plans)}
+    return service.list_plans()
+
 
 class CompletionPayload(BaseModel):
     day: int
     completed_at: datetime
+
 
 @router.post("/reading/complete")
 async def mark_complete(payload: CompletionPayload):

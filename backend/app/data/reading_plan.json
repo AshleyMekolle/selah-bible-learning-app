@@ -1,9 +1,126 @@
 {
-  "1": { "book": "Genesis", "chapter": 1 },
-  "2": { "book": "Genesis", "chapter": 2 },
-  "3": { "book": "Genesis", "chapter": 3 },
-  "4": { "book": "Genesis", "chapter": 4 },
-  "5": { "book": "Genesis", "chapter": 5 },
-
-  "46": { "book": "Genesis", "chapter": 46 }
+  "1": {
+    "book": "Genesis",
+    "chapter": 1
+  },
+  "2": {
+    "book": "Genesis",
+    "chapter": 2
+  },
+  "3": {
+    "book": "Genesis",
+    "chapter": 3
+  },
+  "4": {
+    "book": "Genesis",
+    "chapter": 4
+  },
+  "5": {
+    "book": "Genesis",
+    "chapter": 5
+  },
+  "6": {
+    "book": "Genesis",
+    "chapter": 6
+  },
+  "7": {
+    "book": "Genesis",
+    "chapter": 7
+  },
+  "8": {
+    "book": "Genesis",
+    "chapter": 8
+  },
+  "9": {
+    "book": "Genesis",
+    "chapter": 9
+  },
+  "10": {
+    "book": "Genesis",
+    "chapter": 10
+  },
+  "11": {
+    "book": "Genesis",
+    "chapter": 11
+  },
+  "12": {
+    "book": "Genesis",
+    "chapter": 12
+  },
+  "13": {
+    "book": "Genesis",
+    "chapter": 13
+  },
+  "14": {
+    "book": "Genesis",
+    "chapter": 14
+  },
+  "15": {
+    "book": "Genesis",
+    "chapter": 15
+  },
+  "16": {
+    "book": "Genesis",
+    "chapter": 16
+  },
+  "17": {
+    "book": "Genesis",
+    "chapter": 17
+  },
+  "18": {
+    "book": "Genesis",
+    "chapter": 18
+  },
+  "19": {
+    "book": "Genesis",
+    "chapter": 19
+  },
+  "20": {
+    "book": "Genesis",
+    "chapter": 20
+  },
+  "21": {
+    "book": "Genesis",
+    "chapter": 21
+  },
+  "22": {
+    "book": "Genesis",
+    "chapter": 22
+  },
+  "23": {
+    "book": "Genesis",
+    "chapter": 23
+  },
+  "24": {
+    "book": "Genesis",
+    "chapter": 24
+  },
+  "25": {
+    "book": "Genesis",
+    "chapter": 25
+  },
+  "26": {
+    "book": "Genesis",
+    "chapter": 26
+  },
+  "27": {
+    "book": "Genesis",
+    "chapter": 27
+  },
+  "28": {
+    "book": "Genesis",
+    "chapter": 28
+  },
+  "29": {
+    "book": "Genesis",
+    "chapter": 29
+  },
+  "30": {
+    "book": "Genesis",
+    "chapter": 30
+  },
+  "31": {
+    "book": "Genesis",
+    "chapter": 31
+  }
 }
