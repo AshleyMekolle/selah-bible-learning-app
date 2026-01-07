@@ -6,7 +6,9 @@ import { useReading } from "../context/ReadingContext";
 import Card from "../components/Card";
 
 export default function ProgressScreen() {
-  const { streak } = useReading()
+  const { streak , getWeeklySummary} = useReading()
+
+  const summary = getWeeklySummary()
 
   const getDayLabels = () => ["S", "M", "T", "W", "T", "F", "S"];
 
