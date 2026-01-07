@@ -46,11 +46,22 @@ export default function ReadScreen (){
     setPagination(data.content.scripture.pagination);
   };
 
+  const getReadingProgress = () => {
+    if (!pagination) return 0;
+    const currentVerse = pagination.start + verses.length;
+    const totalVerses = pagination.total || currentVerse;
+    return Math.round((currentVerse / totalVerses) * 100);
+  };
+
   if (loading) {
     return (
       <View style={styles.loading}>
-        <ActivityIndicator size="large" color={colors.primary} />
-        <Text style={styles.loadingText}>Loading today's reading...</Text>
+        <View style={styles.loadingIconContainer}>
+          <Ionicons name="book" size={48} color={colors.primary} />
+        </View>
+        <ActivityIndicator size="large" color={colors.primary} style={styles.spinner} />
+        <Text style={styles.loadingTitle}>Preparing Scripture</Text>
+        <Text style={styles.loadingText}>Opening today's reading for you...</Text>
       </View>
     );
   }
@@ -60,9 +71,13 @@ export default function ReadScreen (){
       <View style={styles.container}>
         <ScriptureCard reference="Error">
           <View style={styles.errorContainer}>
-            <Ionicons name="alert-circle-outline" size={48} color={colors.textSecondary} />
+            <View style={styles.errorIconContainer}>
+              <Ionicons name="alert-circle" size={56} color={colors.primary} />
+            </View>
+            <Text style={styles.errorTitle}>Unable to Load</Text>
             <Text style={styles.errorText}>{error}</Text>
             <Pressable style={styles.retryButton} onPress={loadReading}>
+              <Ionicons name="refresh" size={18} color="#FFFFFF" />
               <Text style={styles.retryText}>Try Again</Text>
             </Pressable>
           </View>
@@ -76,9 +91,13 @@ export default function ReadScreen (){
       <View style={styles.container}>
         <ScriptureCard reference="No Scripture Available">
           <View style={styles.emptyContainer}>
-            <Ionicons name="book-outline" size={48} color={colors.textSecondary} />
-            <Text style={styles.emptyText}>No verses found</Text>
+            <View style={styles.emptyIconContainer}>
+              <Ionicons name="book-outline" size={56} color={colors.textSecondary} />
+            </View>
+            <Text style={styles.emptyTitle}>No Verses Found</Text>
+            <Text style={styles.emptyText}>We couldn't find any verses for today</Text>
             <Pressable style={styles.retryButton} onPress={loadReading}>
+              <Ionicons name="refresh" size={18} color="#FFFFFF" />
               <Text style={styles.retryText}>Retry</Text>
             </Pressable>
           </View>
@@ -87,11 +106,33 @@ export default function ReadScreen (){
     );
   }
 
+  const progress = getReadingProgress();
+
   return (
     <View style={styles.container}>
+      <View style={styles.progressHeader}>
+        <View style={styles.progressInfo}>
+          <Ionicons name="book-outline" size={16} color={colors.primary} />
+          <Text style={styles.progressText}>
+            Day {day} • {verses.length} verses read
+          </Text>
+        </View>
+        {progress < 100 && (
+          <View style={styles.progressBarContainer}>
+            <View style={[styles.progressBar, { width: `${progress}%` }]} />
+          </View>
+        )}
+      </View>
+
       <ScriptureCard reference={pagination?.reference || "Today's Reading"}>
-        <ScrollView>
+        <ScrollView showsVerticalScrollIndicator={false}>
           <FadeInView>
+            <View style={styles.readingIntro}>
+              <Text style={styles.readingIntroText}>
+                Take your time. Let each word settle.
+              </Text>
+            </View>
+
             {verses.map((verse) => (
               <VerseItem
                 key={verse.id}
@@ -99,14 +140,30 @@ export default function ReadScreen (){
                 text={verse.text}
               />
             ))}
+
+            {pagination?.has_more ? (
+              <Pressable onPress={loadMore} style={styles.loadMoreContainer}>
+                <View style={styles.loadMoreDivider} />
+                <View style={styles.loadMoreButton}>
+                  <Ionicons name="chevron-down-circle-outline" size={20} color={colors.primary} />
+                  <Text style={styles.loadMoreText}>Continue Reading</Text>
+                </View>
+                <View style={styles.loadMoreDivider} />
+              </Pressable>
+            ) : (
+              <View style={styles.endContainer}>
+                <View style={styles.endDivider} />
+                <View style={styles.endBadge}>
+                  <Ionicons name="checkmark-circle" size={18} color={colors.accent} />
+                  <Text style={styles.endText}>Chapter Complete</Text>
+                </View>
+                <Text style={styles.endSubtext}>
+                  You've finished today's reading
+                </Text>
+              </View>
+            )}
           </FadeInView>
         </ScrollView>
-        
-        <Pressable onPress={loadMore} disabled={!pagination?.has_more} style={styles.loadMoreButton}>
-          <Text style={[styles.loadMoreText, !pagination?.has_more && styles.endText]}>
-            {pagination?.has_more ? "Load more" : "End of chapter"}
-          </Text>
-        </Pressable>
       </ScriptureCard>
 
       <ReadingCompletion completed={completedToday} onComplete={completeReading} />
@@ -124,60 +181,210 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
+    backgroundColor: colors.background,
+    padding: 40,
+  },
+  loadingIconContainer: {
+    width: 96,
+    height: 96,
+    borderRadius: 48,
+    backgroundColor: colors.primary + '15',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: 20,
+  },
+  spinner: {
+    marginVertical: 20,
+  },
+  loadingTitle: {
+    fontSize: 20,
+    fontFamily: typography.semibold,
+    color: colors.textPrimary,
+    marginBottom: 8,
+    letterSpacing: -0.3,
   },
   loadingText: {
-    marginTop: 12,
     fontSize: 14,
     color: colors.textSecondary,
-    fontFamily: typography.regular
+    fontFamily: typography.regular,
+    textAlign: 'center',
   },
+
+  progressHeader: {
+    marginBottom: 16,
+  },
+  progressInfo: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 6,
+    marginBottom: 8,
+  },
+  progressText: {
+    fontSize: 13,
+    fontFamily: typography.medium,
+    color: colors.textSecondary,
+    letterSpacing: 0.2,
+  },
+  progressBarContainer: {
+    height: 3,
+    backgroundColor: colors.textSecondary + '20',
+    borderRadius: 2,
+    overflow: 'hidden',
+  },
+  progressBar: {
+    height: '100%',
+    backgroundColor: colors.primary,
+    borderRadius: 2,
+  },
+
+  readingIntro: {
+    backgroundColor: colors.accent + '10',
+    padding: 16,
+    borderRadius: 8,
+    marginBottom: 24,
+    borderLeftWidth: 3,
+    borderLeftColor: colors.accent,
+  },
+  readingIntroText: {
+    fontSize: 14,
+    fontFamily: typography.regular,
+    color: colors.textPrimary,
+    fontStyle: 'italic',
+    textAlign: 'center',
+    lineHeight: 20,
+  },
+
   errorContainer: {
     alignItems: 'center',
     justifyContent: 'center',
     padding: 40,
   },
-  errorText: {
-    fontSize: 16,
-    color: colors.textPrimary,
-    fontFamily: typography.medium,
-    textAlign: 'center',
-    marginTop: 16,
-    marginBottom: 24,
+  errorIconContainer: {
+    width: 96,
+    height: 96,
+    borderRadius: 48,
+    backgroundColor: colors.primary + '10',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: 20,
   },
+  errorTitle: {
+    fontSize: 20,
+    fontFamily: typography.semibold,
+    color: colors.textPrimary,
+    marginBottom: 8,
+    letterSpacing: -0.3,
+  },
+  errorText: {
+    fontSize: 14,
+    color: colors.textSecondary,
+    fontFamily: typography.regular,
+    textAlign: 'center',
+    marginBottom: 24,
+    lineHeight: 20,
+  },
+
   emptyContainer: {
     alignItems: 'center',
     justifyContent: 'center',
     padding: 40,
   },
-  emptyText: {
-    fontSize: 16,
-    color: colors.textPrimary,
-    fontFamily: typography.medium,
-    textAlign: 'center',
-    marginTop: 16,
-    marginBottom: 24,
+  emptyIconContainer: {
+    width: 96,
+    height: 96,
+    borderRadius: 48,
+    backgroundColor: colors.textSecondary + '10',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: 20,
   },
+  emptyTitle: {
+    fontSize: 20,
+    fontFamily: typography.semibold,
+    color: colors.textPrimary,
+    marginBottom: 8,
+    letterSpacing: -0.3,
+  },
+  emptyText: {
+    fontSize: 14,
+    color: colors.textSecondary,
+    fontFamily: typography.regular,
+    textAlign: 'center',
+    marginBottom: 24,
+    lineHeight: 20,
+  },
+
   retryButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
     backgroundColor: colors.primary,
     paddingHorizontal: 24,
     paddingVertical: 12,
-    borderRadius: 8,
+    borderRadius: 24,
   },
   retryText: {
     color: '#FFFFFF',
-    fontFamily: typography.medium,
+    fontFamily: typography.semibold,
     fontSize: 14,
+    letterSpacing: 0.3,
+  },
+
+  loadMoreContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginVertical: 32,
+    gap: 16,
+  },
+  loadMoreDivider: {
+    flex: 1,
+    height: 1,
+    backgroundColor: colors.textSecondary + '20',
   },
   loadMoreButton: {
-    paddingVertical: 16,
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+    paddingHorizontal: 16,
+    paddingVertical: 8,
   },
   loadMoreText: {
-    textAlign: "center",
     color: colors.primary,
-    fontFamily: typography.medium,
+    fontFamily: typography.semibold,
     fontSize: 14,
+    letterSpacing: 0.2,
+  },
+
+  endContainer: {
+    alignItems: 'center',
+    marginVertical: 32,
+  },
+  endDivider: {
+    width: '100%',
+    height: 1,
+    backgroundColor: colors.textSecondary + '20',
+    marginBottom: 20,
+  },
+  endBadge: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 6,
+    backgroundColor: colors.accent + '15',
+    paddingHorizontal: 16,
+    paddingVertical: 8,
+    borderRadius: 20,
+    marginBottom: 8,
   },
   endText: {
+    color: colors.accent,
+    fontFamily: typography.semibold,
+    fontSize: 14,
+    letterSpacing: 0.3,
+  },
+  endSubtext: {
+    fontSize: 13,
+    fontFamily: typography.regular,
     color: colors.textSecondary,
+    textAlign: 'center',
   },
 });
