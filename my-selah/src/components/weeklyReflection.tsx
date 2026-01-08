@@ -6,7 +6,7 @@ type Props = {
     completedDays: number
 }
 
-export default function weeklyReflection({completedDays}: Props){
+export default function WeeklyReflection({completedDays}: Props){
     let message = "Every moment you opened the Word mattered.";
 
     if(completedDays === 7){

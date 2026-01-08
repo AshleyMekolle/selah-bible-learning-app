@@ -4,13 +4,18 @@ import { typography } from "../theme/typography";
 import { colors } from "../theme/color";
 import { useReading } from "../context/ReadingContext";
 import Card from "../components/Card";
+import WeeklyReflection from "../components/weeklyReflection";
 
 export default function ProgressScreen() {
-  const { streak , getWeeklySummary} = useReading()
+  const { streak , getWeeklySummary, isSunday} = useReading()
 
   const summary = getWeeklySummary()
 
   const getDayLabels = () => ["S", "M", "T", "W", "T", "F", "S"];
+
+  {isSunday() && (
+  <WeeklyReflection completedDays={summary.completedDays} />
+)}
 
   return(
     <ScrollView 
