@@ -20,6 +20,7 @@ type ReadingContextType = {
   readingLog: ReadingLogEntry[];
   completeReading: () => void;
   getWeeklySummary: () => WeeklySummary;
+  isSunday: () => boolean;
 };
 
 
@@ -136,6 +137,10 @@ export function ReadingProvider({ children }: { children: ReactNode }) {
     await AsyncStorage.setItem(STORAGE_KEYS.lastCompletedDate, today);
   };
 
+  const isSunday = () => {
+    return new Date().getDay() === 0;
+  }
+
   const getWeeklySummary = (): WeeklySummary => {
     const today = new Date();
 
@@ -169,6 +174,7 @@ export function ReadingProvider({ children }: { children: ReactNode }) {
         readingLog,
         completeReading,
         getWeeklySummary,
+        isSunday,
       }}
     >
       {children}
