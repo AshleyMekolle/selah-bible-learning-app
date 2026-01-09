@@ -5,6 +5,7 @@ import { colors } from "../theme/color";
 import { useReading } from "../context/ReadingContext";
 import Card from "../components/Card";
 import WeeklyReflection from "../components/weeklyReflection";
+import WeekCalendar from "../components/WeeklyCalendar";
 
 export default function ProgressScreen() {
   const { streak , getWeeklySummary, isSunday} = useReading()
@@ -60,6 +61,9 @@ export default function ProgressScreen() {
           <Text style={styles.weekCount}>
             {Math.min(streak, 7)}/7
           </Text>
+
+          <WeekCalendar completedDays={summary.completedDays} />
+
         </View>
 
         <View style={styles.weekGrid}>
