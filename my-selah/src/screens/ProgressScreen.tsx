@@ -62,9 +62,10 @@ export default function ProgressScreen() {
             {Math.min(streak, 7)}/7
           </Text>
 
-          <WeekCalendar completedDays={summary.completedDays} />
-
         </View>
+
+        
+          {/* <WeekCalendar completedDays={summary.completedDays} /> */}
 
         <View style={styles.weekGrid}>
           {getDayLabels().map((day, index) => {
