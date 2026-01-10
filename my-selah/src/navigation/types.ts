@@ -6,5 +6,6 @@ export type RootStackParamList ={
     Study: undefined;
     Progress: undefined;
     ReflectionHistory: undefined;
-    Profile: undefined
+    Profile: undefined;
+    Quiz: undefined;
 }

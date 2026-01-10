@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, ScrollView } from "react-native"
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from "react-native"
 import Card from "../components/Card";
 import { useState, useEffect } from "react";
 import ActionButton from "../components/ActionButton";
@@ -10,6 +10,7 @@ import { Ionicons } from "@expo/vector-icons";
 import { typography } from "../theme/typography";
 import TodayReadingCard from "../components/TodayReadingCard";
 import { getTodayReading } from "../utils/getTodayReading";
+
 
 type Props = NativeStackScreenProps<RootStackParamList, 'Home'>;
 
@@ -104,6 +105,18 @@ export default function HomeScreen({navigation}: Props) {
          </Text>
          <Text style={styles.encouragementVerse}>Psalm 119:105</Text>
        </View>
+
+       
+      <TouchableOpacity
+        style={styles.card}
+        onPress={() => navigation.navigate("Quiz")}
+      >
+        <Text style={styles.cardTitle}>Bible Quiz</Text>
+        <Text style={styles.cardSubtitle}>
+          Test your knowledge of the Word
+        </Text>
+      </TouchableOpacity>
+      
     </ScrollView>
   );
 }
@@ -164,6 +177,17 @@ const styles = StyleSheet.create({
         color: colors.textSecondary,
         lineHeight: 20,
     },
+      card: {
+    padding: 20,
+    borderRadius: 16,
+    backgroundColor: "#F9FAFB",
+    borderWidth: 1,
+    borderColor: "#E5E7EB",
+  },
+  cardSubtitle: {
+    marginTop: 6,
+    color: colors.textSecondary,
+  },
     actionsSection: {
         marginTop: 8,
         marginBottom: 24,

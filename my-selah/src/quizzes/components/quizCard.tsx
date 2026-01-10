@@ -7,7 +7,7 @@ export default function QuizCard({ children }: { children: React.ReactNode }) {
 
 const styles = StyleSheet.create({
   card: {
-    backgroundColor: colors.surface,
+    backgroundColor: colors.accent,
     borderRadius: 18,
     padding: 20,
     shadowColor: "#000",

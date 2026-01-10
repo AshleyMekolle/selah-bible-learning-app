@@ -5,7 +5,7 @@ import { newTestamentQuestions } from "./questions/new_testament";
 export function generateQuiz(
   testament: Testament,
   difficulty: Difficulty,
-  limit = 5
+  limit = 10
 ): QuizQuestion[] {
   const pool =
     testament === "old"
