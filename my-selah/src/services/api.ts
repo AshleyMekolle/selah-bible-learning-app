@@ -1,3 +1,4 @@
+import { getHardcodedReading } from "../mocks/scripture";
 import { DayResponse } from "../navigation/api";
 
 export async function getDayReading(
@@ -5,23 +6,34 @@ export async function getDayReading(
   start = 1,
   limit = 10
 ): Promise<DayResponse> {
-  const res = await fetch(
-    `http://127.0.0.1:8000/api/v1/day/${day}?start=${start}&limit=${limit}`
-  );
-
-  if (!res.ok) {
-    throw new Error("Failed to fetch day reading");
+  const reading = getHardcodedReading(day);
+  
+  if (!reading) {
+    throw new Error("No reading found for this day");
   }
-
-  const data = await res.json();
+ 
+  const paginatedVerses = reading.verses.slice(start - 1, start - 1 + limit);
   
   return {
-    meta: data.meta,
+    meta: {
+      day: day,
+      total_days: 7,
+      date: new Date().toISOString().split('T')[0]
+    },
     content: {
       scripture: {
-        reference: data.content.reference,
-        verses: data.content.verses,
-        pagination: data.content.pagination
+        reference: reading.reference,
+        verses: paginatedVerses.map((verse, index) => ({
+          id: `${day}-${verse.number}`,
+          number: verse.number,
+          text: verse.text
+        })),
+        pagination: {
+          start: start,
+          limit: limit,
+          total: reading.verses.length,
+          has_more: start + limit - 1 < reading.verses.length
+        }
       }
     }
   };

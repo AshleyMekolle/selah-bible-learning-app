@@ -19,20 +19,20 @@ export default function ReadScreen (){
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  const loadReading = async () => {
-    try {
-      setLoading(true);
-      setError(null);
-      const data = await getDayReading(1); 
-      setDay(data.meta.day);
-      setVerses(data.content.scripture.verses);
-      setPagination(data.content.scripture.pagination);
-    } catch (err: any) {
-      setError(err.message);
-    } finally {
-      setLoading(false);
-    }
-  };
+  // const loadReading = async () => {
+  //   try {
+  //     setLoading(true);
+  //     setError(null);
+  //     const data = await getDayReading(1); 
+  //     setDay(data.meta.day);
+  //     setVerses(data.content.scripture.verses);
+  //     setPagination(data.content.scripture.pagination);
+  //   } catch (err: any) {
+  //     setError(err.message);
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
 
   useEffect(() => {
     loadReading();
@@ -51,6 +51,24 @@ export default function ReadScreen (){
     const currentVerse = pagination.start + verses.length;
     const totalVerses = pagination.total || currentVerse;
     return Math.round((currentVerse / totalVerses) * 100);
+  };
+
+    const loadReading = async () => {
+    try {
+      setLoading(true);
+      setError(null);
+      const dayToLoad = 1; 
+      const data = await getDayReading(dayToLoad);
+      
+      setDay(data.meta.day);
+      setVerses(data.content.scripture.verses);
+      setPagination(data.content.scripture.pagination);
+    } catch (err: any) {
+      setError(err.message || "Failed to load reading");
+      console.error("Error loading reading:", err);
+    } finally {
+      setLoading(false);
+    }
   };
 
   if (loading) {
