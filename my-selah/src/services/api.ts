@@ -1,4 +1,4 @@
-import { getHardcodedReading } from "../mocks/scripture";
+import { getHardcodedReading } from "../mocks/dailyReading";
 import { DayResponse } from "../navigation/api";
 
 export async function getDayReading(

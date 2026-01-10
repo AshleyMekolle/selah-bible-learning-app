@@ -1,4 +1,4 @@
-import { getTodayReading as getHardcodedTodayReading } from "../mocks/scripture";
+import { getTodayReading as getHardcodedTodayReading } from "../mocks/dailyReading";
 
 export function getTodayReading() {
   const reading = getHardcodedTodayReading();
