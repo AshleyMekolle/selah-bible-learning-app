@@ -28,7 +28,7 @@ export default function HomeHeaderRight() {
           <View style={styles.avatarContainer}>
             <Ionicons 
               name={iconName as any} 
-              size={18} 
+              size={15} 
               color={colors.primary}
             />
           </View>
@@ -55,8 +55,8 @@ const styles = StyleSheet.create({
     padding: 4,
   },
   avatarContainer: {
-    width: 36,
-    height: 36,
+    width: 30,
+    height: 30,
     borderRadius: 18,
     backgroundColor: colors.primary + "15",
     alignItems: "center",
