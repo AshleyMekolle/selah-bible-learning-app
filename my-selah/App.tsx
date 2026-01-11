@@ -3,6 +3,7 @@ import { ReadingProvider } from "./src/context/ReadingContext";
 import { NavigationContainer } from "@react-navigation/native";
 import { useFonts, Inter_400Regular, Inter_500Medium, Inter_600SemiBold } from "@expo-google-fonts/inter";
 import { View } from "react-native";
+import { AvatarProvider } from "./src/context/AvatarContext";
 import {  Poppins_400Regular, Poppins_500Medium, Poppins_600SemiBold } from "@expo-google-fonts/poppins";
 
 
@@ -17,10 +18,12 @@ export default function App (){
     return <View/>
    }
   return(
+    <AvatarProvider>
     <ReadingProvider>
       <NavigationContainer>
             <AppNavigator/>
       </NavigationContainer>
     </ReadingProvider>
+    </AvatarProvider>
   );
 }

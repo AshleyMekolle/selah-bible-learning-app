@@ -1,6 +1,6 @@
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from "react-native"
 import Card from "../components/Card";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useLayoutEffect } from "react";
 import ActionButton from "../components/ActionButton";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../navigation/types";
@@ -12,6 +12,7 @@ import TodayReadingCard from "../components/TodayReadingCard";
 import { getTodayReading } from "../utils/getTodayReading";
 import { getRandomScripture } from "../mocks/scripture";
 import { ScriptureVerseCard } from "../components/ScriptureCard";
+import HomeHeaderRight from "../components/HomeHeader";
 
 type Props = NativeStackScreenProps<RootStackParamList, 'Home'>;
 
@@ -41,6 +42,12 @@ export default function HomeScreen({navigation}: Props) {
       const scripture = getRandomScripture();
       setDailyScripture(scripture);
     }, []);
+
+    useLayoutEffect(() => {
+  navigation.setOptions({
+    headerRight: () => <HomeHeaderRight />,
+  });
+}, [navigation]);
 
   return(
     <ScrollView 
