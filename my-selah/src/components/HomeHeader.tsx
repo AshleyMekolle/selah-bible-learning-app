@@ -5,9 +5,11 @@ import { colors } from "../theme/color";
 import { useAvatar } from "../context/AvatarContext";
 import AvatarPickerModal from "../components/AvatarPickerModal";
 import { typography } from "../theme/typography";
+import { useXP } from "../context/XPContext";
 
 export default function HomeHeaderRight() {
   const { avatar, setAvatar } = useAvatar();
+  const { xp, level } = useXP();
   const [open, setOpen] = useState(false);
   const iconName = avatar || "person";
 
@@ -21,7 +23,7 @@ export default function HomeHeaderRight() {
             color="#F59E0B" 
             style={styles.xpIcon}
           />
-          <Text style={styles.xpText}>120</Text>
+          <Text style={styles.xpText}>{xp}</Text>
         </View>
 
         <Pressable onPress={() => setOpen(true)} style={styles.avatarButton}>

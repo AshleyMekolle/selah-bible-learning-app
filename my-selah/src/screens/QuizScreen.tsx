@@ -13,6 +13,7 @@ import { generateQuiz } from "../quizzes/quizEngine";
 import { QuizQuestion, Difficulty, Testament } from "../quizzes/types";
 import { SafeAreaView } from "react-native-safe-area-context";
 import ContinueButton from "../quizzes/components/ContinueButton";
+import { useXP, XPProvider } from "../context/XPContext";
 
 type Props = NativeStackScreenProps<RootStackParamList, "Quiz">;
 
@@ -26,12 +27,12 @@ export default function QuizScreen({ navigation }: Props) {
   const [score, setScore] = useState(0);
   const [isAnswered, setIsAnswered] = useState(false);
   const [selectedTestament, setSelectedTestament] = useState<Testament>("old");
-  const [selectedDifficulty, setSelectedDifficulty] =
-    useState<Difficulty>("beginner");
+  const [selectedDifficulty, setSelectedDifficulty] = useState<Difficulty>("beginner");
   const [isLoading, setIsLoading] = useState(false);
-
   const currentQuestion = quizQuestions[currentQuestionIndex];
   const totalQuestions = quizQuestions.length;
+  const { addXP, xp, level } = useXP();
+
   const startQuiz = () => {
     setIsLoading(true);
     setTimeout(() => {
@@ -80,6 +81,26 @@ export default function QuizScreen({ navigation }: Props) {
     }
   };
 
+  const awardXP = () => {
+    let xpEarned = 0;
+    xpEarned += 10;
+    if (score === totalQuestions) {
+      xpEarned += 20;
+    }
+    if (selectedDifficulty === "intermediate") {
+      xpEarned += 15;
+    } else if (selectedDifficulty === "advanced") {
+      xpEarned += 25;
+    }
+    const accuracy = (score / totalQuestions) * 100;
+    if (accuracy >= 80) {
+      xpEarned += Math.floor(accuracy / 10) * 5;
+    }
+    
+    addXP(xpEarned);
+    return xpEarned;
+  };
+
   const handleContinue = () => {
     if (!currentQuestion) return;
     if (currentQuestionIndex < totalQuestions - 1) {
@@ -87,6 +108,7 @@ export default function QuizScreen({ navigation }: Props) {
       setSelectedAnswer(null);
       setIsAnswered(false);
     } else {
+      awardXP();
       setGameState("results");
     }
   };
@@ -306,75 +328,130 @@ export default function QuizScreen({ navigation }: Props) {
     );
   };
 
-  const renderResultsScreen = () => (
-    <ScrollView contentContainerStyle={styles.resultsContainer}>
-      <View style={styles.resultsHeader}>
-        <Ionicons
-          name={score === totalQuestions ? "trophy" : "star"}
-          size={60}
-          color={score === totalQuestions ? colors.primary : "#FFC107"}
-        />
-        <Text style={styles.resultsTitle}>
-          {score === totalQuestions ? "Perfect Score!" : "Quiz Complete!"}
-        </Text>
-        <Text style={styles.resultsSubtitle}>
-          {selectedTestament === "old" ? "Old Testament" : "New Testament"} •{" "}
-          {selectedDifficulty}
-        </Text>
-      </View>
-
-      <QuizCard>
-        <View style={styles.scoreDisplay}>
-          <Text style={styles.finalScore}>{score}</Text>
-          <Text style={styles.finalScoreLabel}>out of {totalQuestions}</Text>
-        </View>
-
-        <View style={styles.resultsStats}>
-          <View style={styles.statItem}>
-            <Text style={styles.statValue}>
-              {Math.round((score / totalQuestions) * 100)}%
-            </Text>
-            <Text style={styles.statLabel}>Accuracy</Text>
-          </View>
-          <View style={styles.statDivider} />
-          <View style={styles.statItem}>
-            <Text style={styles.statValue}>{totalQuestions}</Text>
-            <Text style={styles.statLabel}>Questions</Text>
-          </View>
-          <View style={styles.statDivider} />
-          <View style={styles.statItem}>
-            <Text style={styles.statValue}>
-              {selectedDifficulty.charAt(0).toUpperCase()}
-            </Text>
-            <Text style={styles.statLabel}>Level</Text>
-          </View>
-        </View>
-
-        <View style={styles.actionButtons}>
-          <Pressable style={styles.restartButton} onPress={handleRestart}>
-            <Ionicons name="refresh" size={20} color={colors.primary} />
-            <Text style={styles.restartButtonText}>Restart Quiz</Text>
-          </Pressable>
-          <Pressable
-            style={styles.homeButton}
-            onPress={() => navigation.navigate("Home")}
-          >
-            <Ionicons name="home" size={20} color="#FFF" />
-            <Text style={styles.homeButtonText}>Back to Home</Text>
-          </Pressable>
-        </View>
-      </QuizCard>
-
-      {score < totalQuestions && (
-        <View style={styles.encouragement}>
-          <Ionicons name="bulb" size={24} color={colors.primary} />
-          <Text style={styles.encouragementText}>
-            Keep studying the Word! Each quiz helps you grow in knowledge.
+   const renderResultsScreen = () => {
+    const xpEarned = calculateXPEarned(); // We'll create this function
+    
+    return (
+      <ScrollView contentContainerStyle={styles.resultsContainer}>
+        <View style={styles.resultsHeader}>
+          <Ionicons
+            name={score === totalQuestions ? "trophy" : "star"}
+            size={60}
+            color={score === totalQuestions ? colors.primary : "#FFC107"}
+          />
+          <Text style={styles.resultsTitle}>
+            {score === totalQuestions ? "Perfect Score!" : "Quiz Complete!"}
+          </Text>
+          <Text style={styles.resultsSubtitle}>
+            {selectedTestament === "old" ? "Old Testament" : "New Testament"} •{" "}
+            {selectedDifficulty}
           </Text>
         </View>
-      )}
-    </ScrollView>
-  );
+
+        <QuizCard>
+          <View style={styles.scoreDisplay}>
+            <Text style={styles.finalScore}>{score}</Text>
+            <Text style={styles.finalScoreLabel}>out of {totalQuestions}</Text>
+          </View>
+
+          {/* Add XP Earned Section */}
+          <View style={styles.xpSection}>
+            <View style={styles.xpHeader}>
+              <Ionicons name="star" size={20} color="#F59E0B" />
+              <Text style={styles.xpTitle}>Experience Points</Text>
+            </View>
+            <View style={styles.xpEarned}>
+              <Text style={styles.xpEarnedText}>+{xpEarned} XP</Text>
+              <Text style={styles.xpTotalText}>Total: {xp} XP</Text>
+            </View>
+            <View style={styles.levelContainer}>
+              <Text style={styles.levelText}>Level {level}</Text>
+              <View style={styles.xpBar}>
+                <View 
+                  style={[
+                    styles.xpProgress, 
+                    { width: `${calculateLevelProgress()}%` }
+                  ]} 
+                />
+              </View>
+            </View>
+          </View>
+
+          <View style={styles.resultsStats}>
+            <View style={styles.statItem}>
+              <Text style={styles.statValue}>
+                {Math.round((score / totalQuestions) * 100)}%
+              </Text>
+              <Text style={styles.statLabel}>Accuracy</Text>
+            </View>
+            <View style={styles.statDivider} />
+            <View style={styles.statItem}>
+              <Text style={styles.statValue}>{totalQuestions}</Text>
+              <Text style={styles.statLabel}>Questions</Text>
+            </View>
+            <View style={styles.statDivider} />
+            <View style={styles.statItem}>
+              <Text style={styles.statValue}>
+                {selectedDifficulty.charAt(0).toUpperCase()}
+              </Text>
+              <Text style={styles.statLabel}>Level</Text>
+            </View>
+          </View>
+
+          <View style={styles.actionButtons}>
+            <Pressable style={styles.restartButton} onPress={handleRestart}>
+              <Ionicons name="refresh" size={20} color={colors.primary} />
+              <Text style={styles.restartButtonText}>Restart Quiz</Text>
+            </Pressable>
+            <Pressable
+              style={styles.homeButton}
+              onPress={() => navigation.navigate("Home")}
+            >
+              <Ionicons name="home" size={20} color="#FFF" />
+              <Text style={styles.homeButtonText}>Back to Home</Text>
+            </Pressable>
+          </View>
+        </QuizCard>
+
+        {score < totalQuestions && (
+          <View style={styles.encouragement}>
+            <Ionicons name="bulb" size={24} color={colors.primary} />
+            <Text style={styles.encouragementText}>
+              Keep studying the Word! Each quiz helps you grow in knowledge.
+            </Text>
+          </View>
+        )}
+      </ScrollView>
+    );
+  };
+
+  const calculateXPEarned = () => {
+    let xpEarned = 0;
+    xpEarned += 10;
+    
+    if (score === totalQuestions) {
+      xpEarned += 20;
+    }
+    
+    if (selectedDifficulty === "intermediate") {
+      xpEarned += 15;
+    } else if (selectedDifficulty === "advanced") {
+      xpEarned += 25;
+    }
+    
+    const accuracy = (score / totalQuestions) * 100;
+    if (accuracy >= 80) {
+      xpEarned += Math.floor(accuracy / 10) * 5;
+    }
+    
+    return xpEarned;
+  };
+
+  const calculateLevelProgress = () => {
+    const xpPerLevel = 100;
+    const currentLevelXP = xp % xpPerLevel;
+    return (currentLevelXP / xpPerLevel) * 100;
+  };
 
   return (
     <SafeAreaView style={styles.container} edges={['top']}>
@@ -689,5 +766,61 @@ const styles = StyleSheet.create({
     color: colors.textSecondary,
     flex: 1,
     lineHeight: 20,
+  },
+   xpSection: {
+    marginTop: 20,
+    marginBottom: 30,
+    padding: 16,
+    backgroundColor: colors.primary + "08",
+    borderRadius: 12,
+  },
+  xpHeader: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    gap: 8,
+    marginBottom: 12,
+  },
+  xpTitle: {
+    fontSize: 16,
+    fontFamily: typography.semibold,
+    color: colors.textPrimary,
+  },
+  xpEarned: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginBottom: 16,
+  },
+  xpEarnedText: {
+    fontSize: 24,
+    fontFamily: typography.bold,
+    color: "#F59E0B",
+  },
+  xpTotalText: {
+    fontSize: 14,
+    fontFamily: typography.medium,
+    color: colors.textSecondary,
+  },
+  levelContainer: {
+    alignItems: "center",
+  },
+  levelText: {
+    fontSize: 14,
+    fontFamily: typography.medium,
+    color: colors.textPrimary,
+    marginBottom: 8,
+  },
+  xpBar: {
+    width: "100%",
+    height: 8,
+    backgroundColor: colors.textSecondary + "20",
+    borderRadius: 4,
+    overflow: "hidden",
+  },
+  xpProgress: {
+    height: "100%",
+    backgroundColor: "#F59E0B",
+    borderRadius: 4,
   },
 });
