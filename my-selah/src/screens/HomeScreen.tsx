@@ -129,14 +129,40 @@ export default function HomeScreen({navigation}: Props) {
 
        
       <TouchableOpacity
-        style={styles.card}
-        onPress={() => navigation.navigate("Quiz")}
-      >
-        <Text style={styles.cardTitle}>Bible Quiz</Text>
-        <Text style={styles.cardSubtitle}>
-          Test your knowledge of the Word
-        </Text>
-      </TouchableOpacity>
+  style={styles.quizCard}
+  onPress={() => navigation.navigate("Quiz")}
+  activeOpacity={0.9}
+>
+  <View style={styles.quizHeader}>
+    <View style={styles.quizIconContainer}>
+      <Ionicons name="book" size={28} color={colors.accent} />
+    </View>
+    <View style={styles.quizBadge}>
+      <Text style={styles.quizBadgeText}>NEW</Text>
+    </View>
+  </View>
+
+  <Text style={styles.quizTitle}>Bible Quiz</Text>
+  <Text style={styles.quizSubtitle}>
+    Test your knowledge and have fun learning Scripture
+  </Text>
+
+  <View style={styles.quizFeatures}>
+    <View style={styles.quizFeature}>
+      <Ionicons name="checkmark-circle" size={16} color={colors.primary} />
+      <Text style={styles.quizFeatureText}>Multiple topics</Text>
+    </View>
+    <View style={styles.quizFeature}>
+      <Ionicons name="checkmark-circle" size={16} color={colors.primary} />
+      <Text style={styles.quizFeatureText}>Track your score</Text>
+    </View>
+  </View>
+
+  <View style={styles.quizFooter}>
+    <Text style={styles.quizCTA}>Start Quiz</Text>
+    <Ionicons name="arrow-forward-circle" size={20} color={colors.primary} />
+  </View>
+</TouchableOpacity>
       
     </ScrollView>
   );
@@ -256,4 +282,85 @@ const styles = StyleSheet.create({
         color: colors.primary,
         letterSpacing: 0.5,
     },
+    quizCard: {
+      backgroundColor: colors.surface,
+      borderRadius: 16,
+      padding: 20,
+      marginTop: 16,
+      borderWidth: 2,
+      borderColor: colors.accent + '30',
+      shadowColor: colors.accent,
+      shadowOffset: { width: 0, height: 4 },
+      shadowOpacity: 0.1,
+      shadowRadius: 8,
+      elevation: 4,
+  },
+  quizHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'flex-start',
+    marginBottom: 16,
+  },
+  quizIconContainer: {
+    width: 56,
+    height: 56,
+    borderRadius: 28,
+    backgroundColor: colors.primary,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  quizBadge: {
+    backgroundColor: colors.primary,
+    paddingHorizontal: 10,
+    paddingVertical: 4,
+    borderRadius: 12,
+  },
+  quizBadgeText: {
+    fontSize: 10,
+    fontFamily: typography.semibold,
+    color: colors.surface,
+    letterSpacing: 1,
+  },
+  quizTitle: {
+    fontSize: 22,
+    fontFamily: typography.semibold,
+    color: colors.textPrimary,
+    marginBottom: 8,
+    letterSpacing: -0.3,
+  },
+  quizSubtitle: {
+    fontSize: 14,
+    fontFamily: typography.regular,
+    color: colors.textSecondary,
+    lineHeight: 20,
+    marginBottom: 16,
+  },
+  quizFeatures: {
+    gap: 8,
+    marginBottom: 16,
+  },
+  quizFeature: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+  },
+  quizFeatureText: {
+    fontSize: 13,
+    fontFamily: typography.regular,
+    color: colors.textPrimary,
+  },
+  quizFooter: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingTop: 16,
+    borderTopWidth: 1,
+    borderTopColor: colors.primary,
+  },
+  quizCTA: {
+    fontSize: 16,
+    fontFamily: typography.semibold,
+    color: colors.textSecondary,
+    letterSpacing: 0.3,
+  },
 })
