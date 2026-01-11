@@ -10,7 +10,8 @@ import { Ionicons } from "@expo/vector-icons";
 import { typography } from "../theme/typography";
 import TodayReadingCard from "../components/TodayReadingCard";
 import { getTodayReading } from "../utils/getTodayReading";
-
+import { getRandomScripture } from "../mocks/scripture";
+import { ScriptureVerseCard } from "../components/ScriptureCard";
 
 type Props = NativeStackScreenProps<RootStackParamList, 'Home'>;
 
@@ -18,6 +19,7 @@ export default function HomeScreen({navigation}: Props) {
 
     const { completedToday } = useReading();
     const [todayReading, setTodayReading] = useState<any>(null);
+    const [dailyScripture, setDailyScripture] = useState<any>(null);
 
     const getGreeting = () => {
       const hour = new Date().getHours();
@@ -33,6 +35,11 @@ export default function HomeScreen({navigation}: Props) {
       };
 
       load();
+    }, []);
+
+     useEffect(() => {
+      const scripture = getRandomScripture();
+      setDailyScripture(scripture);
     }, []);
 
   return(
@@ -67,14 +74,28 @@ export default function HomeScreen({navigation}: Props) {
          </View>
        </Card>
 
-       {todayReading && (
+       {/* {todayReading && (
          <TodayReadingCard
            book={todayReading.book}
            chapter={todayReading.chapter}
            testament={todayReading.testament}
            onPress={() => navigation.navigate("Read")}
          />
+       )} */}
+
+       {dailyScripture && (
+         <View style={styles.scriptureSection}>
+           <Text style={styles.sectionLabel}>VERSE OF THE DAY</Text>
+           <ScriptureVerseCard
+             verse={dailyScripture.verse}
+             reference={dailyScripture.reference}
+             onPress={() => {
+               console.log("Scripture pressed:", dailyScripture);
+             }}
+           />
+         </View>
        )}
+
        <View style={styles.actionsSection}>
          <Text style={styles.sectionLabel}>QUICK ACTIONS</Text>
          <View style={styles.actions}>
@@ -203,6 +224,10 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-between',
         gap: 12,
+    },
+    scriptureSection: {
+        marginTop: 8,
+        marginBottom: 16,
     },
     encouragement: {
         backgroundColor: colors.primary + '08',

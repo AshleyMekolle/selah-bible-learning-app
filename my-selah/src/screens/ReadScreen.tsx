@@ -2,7 +2,7 @@ import {View, Text, StyleSheet, Pressable, ActivityIndicator, ScrollView} from '
 import { getDayReading } from '../services/api';
 import { useState, useEffect } from 'react';
 import { colors } from '../theme/color';
-import ScriptureCard from '../components/ScriptureCard';
+import {ScriptureCard} from '../components/ScriptureCard';
 import { useReading } from '../context/ReadingContext';
 import { Ionicons } from '@expo/vector-icons';
 import { typography } from '../theme/typography';

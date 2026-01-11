@@ -1,15 +1,32 @@
-import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from "react-native";
+import { ReactNode } from "react";
 import { Ionicons } from "@expo/vector-icons";
 import { colors } from "../theme/color";
 import { typography } from "../theme/typography";
 
-interface ScriptureCardProps {
+type ScriptureCardProps = {
+    reference: string,
+    children: ReactNode
+}
+
+interface ScriptureVerseCardProps {
   verse: string;
   reference: string;
   onPress?: () => void;
 }
 
-export default function ScriptureCard({ verse, reference, onPress }: ScriptureCardProps) {
+export function ScriptureCard ({reference, children}: ScriptureCardProps){
+  return(
+    <View style={styles.container}>
+        <Text style={styles.reference}>{reference}</Text>
+        <ScrollView showsVerticalScrollIndicator={false}>
+            {children}
+        </ScrollView>
+    </View>
+  )
+}
+
+export  function ScriptureVerseCard({ verse, reference, onPress }: ScriptureVerseCardProps) {
   const content = (
     <View style={styles.container}>
       <View style={styles.iconContainer}>
