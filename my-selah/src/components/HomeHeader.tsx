@@ -4,23 +4,35 @@ import { useState } from "react";
 import { colors } from "../theme/color";
 import { useAvatar } from "../context/AvatarContext";
 import AvatarPickerModal from "../components/AvatarPickerModal";
+import { typography } from "../theme/typography";
 
 export default function HomeHeaderRight() {
   const { avatar, setAvatar } = useAvatar();
   const [open, setOpen] = useState(false);
+  const iconName = avatar || "person";
 
   return (
     <>
       <View style={styles.container}>
-        <Pressable onPress={() => setOpen(true)} style={styles.avatar}>
-          <Text style={styles.avatarText}>{avatar}</Text>
-        </Pressable>
-
-        <View style={styles.xp}>
-          <Text style={styles.xpText}>120 XP</Text>
+        <View style={styles.xpContainer}>
+          <Ionicons 
+            name="trophy" 
+            size={15} 
+            color="#F59E0B" 
+            style={styles.xpIcon}
+          />
+          <Text style={styles.xpText}>120</Text>
         </View>
 
-        <Ionicons name="trophy-outline" size={22} color={colors.primary} />
+        <Pressable onPress={() => setOpen(true)} style={styles.avatarButton}>
+          <View style={styles.avatarContainer}>
+            <Ionicons 
+              name={iconName as any} 
+              size={18} 
+              color={colors.primary}
+            />
+          </View>
+        </Pressable>
       </View>
 
       <AvatarPickerModal
@@ -37,27 +49,37 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     gap: 12,
+    marginRight: 12,
   },
-  avatar: {
+  avatarButton: {
+    padding: 4,
+  },
+  avatarContainer: {
     width: 36,
     height: 36,
     borderRadius: 18,
-    backgroundColor: colors.accent,
+    backgroundColor: colors.primary + "15",
     alignItems: "center",
     justifyContent: "center",
+    borderWidth: 1.5,
+    borderColor: colors.primary + "30",
   },
-  avatarText: {
-    fontSize: 18,
-  },
-  xp: {
+  xpContainer: {
+    flexDirection: "row",
+    alignItems: "center",
     backgroundColor: colors.surface,
-    paddingHorizontal: 8,
-    paddingVertical: 4,
-    borderRadius: 12,
+    paddingHorizontal: 10,
+    paddingVertical: 5,
+    borderRadius: 16,
+    borderWidth: 1,
+    borderColor: colors.primary + "30",
+  },
+  xpIcon: {
+    marginRight: 4,
   },
   xpText: {
     fontSize: 12,
+    fontFamily: typography.semibold,
     color: colors.textPrimary,
-    fontWeight: "600",
   },
 });
