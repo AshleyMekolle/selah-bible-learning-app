@@ -123,17 +123,6 @@ export default function HomeScreen({navigation}: Props) {
            />
          </View>
        </View>
-
-       <View style={styles.encouragement}>
-         <Text style={styles.encouragementIcon}>
-            <Ionicons name="sparkles" size={24} color={colors.primary}/>
-            </Text>
-         <Text style={styles.encouragementText}>
-           "Your word is a lamp to my feet and a light to my path."
-         </Text>
-         <Text style={styles.encouragementVerse}>Psalm 119:105</Text>
-       </View>
-
        
       <TouchableOpacity
   style={styles.quizCard}
@@ -170,6 +159,17 @@ export default function HomeScreen({navigation}: Props) {
     <Ionicons name="arrow-forward-circle" size={20} color={colors.primary} />
   </View>
 </TouchableOpacity>
+
+<View style={styles.encouragement}>
+         <Text style={styles.encouragementIcon}>
+            <Ionicons name="sparkles" size={24} color={colors.primary}/>
+            </Text>
+         <Text style={styles.encouragementText}>
+           "Your word is a lamp to my feet and a light to my path."
+         </Text>
+         <Text style={styles.encouragementVerse}>Psalm 119:105</Text>
+       </View>
+
       
     </ScrollView>
   );
@@ -294,6 +294,7 @@ const styles = StyleSheet.create({
       borderRadius: 16,
       padding: 20,
       marginTop: 16,
+      marginBottom: 26,
       borderWidth: 2,
       borderColor: colors.accent + '30',
       shadowColor: colors.accent,
