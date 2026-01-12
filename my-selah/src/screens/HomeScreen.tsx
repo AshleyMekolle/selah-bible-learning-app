@@ -174,7 +174,7 @@ export default function HomeScreen({navigation}: Props) {
 </View>
 
       <View style={styles.copyrightContainer}>
-  <Text style={styles.copyrightText}>© 2024 Selah Bible App</Text>
+  <Text style={styles.copyrightText}>© 2026 Selah Bible App</Text>
   <Text style={styles.copyrightSubtext}>All rights reserved</Text>
   <Text style={styles.copyrightSubtext}>Made with <Ionicons name="heart"/> by Mekolle Ashley</Text>
 </View>
