@@ -168,9 +168,13 @@ export default function HomeScreen({navigation}: Props) {
            "Your word is a lamp to my feet and a light to my path."
          </Text>
          <Text style={styles.encouragementVerse}>Psalm 119:105</Text>
-       </View>
+</View>
 
-      
+      <View style={styles.copyrightContainer}>
+  <Text style={styles.copyrightText}>© 2024 Selah Bible App</Text>
+  <Text style={styles.copyrightSubtext}>All rights reserved</Text>
+  <Text style={styles.copyrightSubtext}>Made with <Ionicons name="heart"/> by Mekolle Ashley</Text>
+</View>
     </ScrollView>
   );
 }
@@ -370,5 +374,24 @@ const styles = StyleSheet.create({
     fontFamily: typography.semibold,
     color: colors.textSecondary,
     letterSpacing: 0.3,
+  },
+  copyrightContainer: {
+    marginTop: 24,
+    alignItems: 'center',
+    paddingTop: 16,
+    borderTopWidth: 1,
+    borderTopColor: colors.accent + "20",
+  },
+  copyrightText: {
+    fontSize: 12,
+    fontFamily: typography.medium,
+    color: colors.textSecondary,
+    marginBottom: 4,
+  },
+  copyrightSubtext: {
+    fontSize: 11,
+    fontFamily: typography.regular,
+    color: colors.textSecondary + '80',
+    letterSpacing: 0.5,
   },
 })
