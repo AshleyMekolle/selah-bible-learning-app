@@ -92,11 +92,23 @@ This app was born out of a personal desire to grow spiritually with consistency 
 
 ---
 
-## Selah Ui
+## Selah UI
 
 Selah is coming out beautifully well :)
 
-![alt text](image.png)         ![alt text](image-1.png)
+![alt text](image.png) 
+
+
+![alt text](image-1.png)
+
+
+![alt text](image-2.png)
+
+
+![alt text](image-3.png)
+
+
+![alt text](image-4.png)
 
 ---
 
