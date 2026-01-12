@@ -92,6 +92,14 @@ This app was born out of a personal desire to grow spiritually with consistency 
 
 ---
 
+## Selah Ui
+
+Selah is coming out beautifully well :)
+
+![alt text](image.png)
+
+---
+
 ## 📌 Note on Naming
 
 **Selah** is a **tentative name** and may change as the project evolves.
