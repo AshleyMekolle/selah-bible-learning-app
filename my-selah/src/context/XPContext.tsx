@@ -15,7 +15,7 @@ const STORAGE_KEYS = {
   level: "@user_level",
 };
 
-const XP_PER_LEVEL = 100; // XP needed to level up
+const XP_PER_LEVEL = 100;
 
 export function XPProvider({ children }: { children: ReactNode }) {
   const [xp, setXP] = useState(0);

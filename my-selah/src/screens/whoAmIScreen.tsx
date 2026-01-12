@@ -103,7 +103,7 @@ export default function WhoAmIScreen() {
       <View style={styles.header}>
         <View style={styles.titleRow}>
           <View style={styles.iconContainer}>
-            <Ionicons name="help-circle" size={32} color={colors.accent} />
+            <Ionicons name="help-circle" size={32} color={colors.primary} />
           </View>
           <Text style={styles.title}>Who Am I?</Text>
         </View>
@@ -112,7 +112,7 @@ export default function WhoAmIScreen() {
 
       <View style={styles.statsRow}>
         <View style={styles.statBadge}>
-          <Ionicons name="trophy" size={16} color={colors.accent} />
+          <Ionicons name="trophy" size={16} color="#F59E0B" />
           <Text style={styles.statText}>Games: {gamesPlayed}</Text>
         </View>
         <View style={styles.statBadge}>

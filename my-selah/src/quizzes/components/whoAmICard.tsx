@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, Pressable } from "react-native";
+import { View, Text, StyleSheet, Pressable, TouchableOpacity } from "react-native";
 import { colors } from "../../theme/color";
 import { typography } from "../../theme/typography";
 import { useNavigation } from "@react-navigation/native";
@@ -8,7 +8,7 @@ export default function WhoAmICard() {
   const navigation = useNavigation<any>();
 
   return (
-    <Pressable
+    <TouchableOpacity
       style={styles.card}
       onPress={() => navigation.navigate("WhoAmI")}
       activeOpacity={0.9}
@@ -41,9 +41,9 @@ export default function WhoAmICard() {
 
       <View style={styles.footer}>
         <Text style={styles.cta}>Start Guessing</Text>
-        <Ionicons name="arrow-forward-circle" size={22} color={colors.accent} />
+        <Ionicons name="arrow-forward-circle" size={22} color={colors.primary} />
       </View>
-    </Pressable>
+    </TouchableOpacity>
   );
 }
 
@@ -71,7 +71,7 @@ const styles = StyleSheet.create({
     width: 56,
     height: 56,
     borderRadius: 28,
-    backgroundColor: colors.accent + '18',
+    backgroundColor: colors.primary,
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -79,7 +79,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 4,
-    backgroundColor: colors.accent,
+    backgroundColor: colors.primary,
     paddingHorizontal: 10,
     paddingVertical: 5,
     borderRadius: 14,
@@ -130,7 +130,7 @@ const styles = StyleSheet.create({
   cta: {
     fontSize: 16,
     fontFamily: typography.semibold,
-    color: colors.accent,
+    color: colors.textSecondary,
     letterSpacing: 0.3,
   },
 });
