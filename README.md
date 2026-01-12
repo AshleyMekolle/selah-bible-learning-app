@@ -96,7 +96,7 @@ This app was born out of a personal desire to grow spiritually with consistency 
 
 Selah is coming out beautifully well :)
 
-![alt text](image.png)
+![alt text](image.png)         ![alt text](image-1.png)
 
 ---
 
