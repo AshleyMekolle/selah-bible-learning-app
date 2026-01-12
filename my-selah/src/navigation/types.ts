@@ -8,4 +8,5 @@ export type RootStackParamList ={
     ReflectionHistory: undefined;
     Profile: undefined;
     Quiz: undefined;
+    WhoAmI: undefined;
 }

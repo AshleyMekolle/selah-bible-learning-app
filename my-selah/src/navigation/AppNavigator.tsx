@@ -8,6 +8,7 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import ReflectionHistoryScreen from "../screens/ReflectionHistory";
 import SplashScreen from "../screens/SplashScreen";
 import QuizScreen from "../screens/QuizScreen";
+import WhoAmIScreen from "../screens/whoAmIScreen";
 
 const Stack = createNativeStackNavigator();
 
@@ -23,6 +24,7 @@ export default function AppNavigator() {
             <Stack.Screen name="Study" component={StudyScreen} />
             <Stack.Screen name="ReflectionHistory" component={ReflectionHistoryScreen}/>
             <Stack.Screen name="Quiz" component={QuizScreen}/>
+            <Stack.Screen name="WhoAmI" component={WhoAmIScreen}/>
         </Stack.Navigator>
     );
 }
