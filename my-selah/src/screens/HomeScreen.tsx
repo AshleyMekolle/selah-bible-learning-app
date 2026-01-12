@@ -13,6 +13,7 @@ import { getTodayReading } from "../utils/getTodayReading";
 import { getRandomScripture } from "../mocks/scripture";
 import { ScriptureVerseCard } from "../components/ScriptureCard";
 import HomeHeaderRight from "../components/HomeHeader";
+import WhoAmICard from "../quizzes/components/whoAmICard";
 
 type Props = NativeStackScreenProps<RootStackParamList, 'Home'>;
 
@@ -159,6 +160,8 @@ export default function HomeScreen({navigation}: Props) {
     <Ionicons name="arrow-forward-circle" size={20} color={colors.primary} />
   </View>
 </TouchableOpacity>
+
+<WhoAmICard/>
 
 <View style={styles.encouragement}>
          <Text style={styles.encouragementIcon}>
