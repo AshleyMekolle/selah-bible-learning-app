@@ -1,8 +1,8 @@
-import { View, Text, StyleSheet, TextInput, Pressable, ScrollView, Animated } from "react-native";
+import { View, Text, StyleSheet, TextInput, Pressable, ScrollView, Animated, Modal } from "react-native";
 import { useEffect, useState, useRef } from "react";
 import { colors } from "../theme/color";
 import { typography } from "../theme/typography";
-import { getRandomWhoAmI } from "../services/whoAmIService";
+import { getRandomWhoAmI, getTodayWhoAmI, CharacterCategory, CharacterSeason } from "../services/whoAmIService";
 import { useXP } from "../context/XPContext";
 import { Ionicons } from "@expo/vector-icons";
 
@@ -20,13 +20,16 @@ export default function WhoAmIScreen() {
     points: number;
   }>(null);
   const [gamesPlayed, setGamesPlayed] = useState(0);
+  const [selectedCategory, setSelectedCategory] = useState<CharacterCategory | null>(null);
+  const [selectedSeason, setSelectedSeason] = useState<CharacterSeason | null>(null);
+  const [showFilterModal, setShowFilterModal] = useState(false);
 
   useEffect(() => {
     loadNewGame();
   }, []);
 
   const loadNewGame = () => {
-    const newCharacter = getRandomWhoAmI();
+    const newCharacter = getRandomWhoAmI(selectedCategory || undefined, selectedSeason || undefined);
     setCharacter(newCharacter);
     setRevealed(0);
     setGuess("");
@@ -85,6 +88,15 @@ export default function WhoAmIScreen() {
     loadNewGame();
   };
 
+  const clearFilters = () => {
+    setSelectedCategory(null);
+    setSelectedSeason(null);
+    loadNewGame();
+  };
+
+  const categories: CharacterCategory[] = ["Kings", "Prophets", "Women", "Apostles", "Judges"];
+  const seasons: CharacterSeason[] = ["Faith", "Leadership", "Redemption", "Courage"];
+
   if (!character) {
     return (
       <View style={styles.loading}>
@@ -119,12 +131,48 @@ export default function WhoAmIScreen() {
           <Ionicons name="star" size={16} color={colors.primary} />
           <Text style={styles.statText}>Max: {POINTS[revealed]} pts</Text>
         </View>
+        <Pressable 
+          style={styles.filterButton}
+          onPress={() => setShowFilterModal(true)}
+        >
+          <Ionicons name="filter" size={16} color={colors.primary} />
+          <Text style={styles.filterButtonText}>Filter</Text>
+        </Pressable>
       </View>
+
+      {(selectedCategory || selectedSeason) && (
+        <View style={styles.activeFilters}>
+          <View style={styles.filterTags}>
+            {selectedCategory && (
+              <View style={styles.filterTag}>
+                <Text style={styles.filterTagText}>{selectedCategory}</Text>
+                <Pressable onPress={() => setSelectedCategory(null)}>
+                  <Ionicons name="close" size={14} color={colors.textSecondary} />
+                </Pressable>
+              </View>
+            )}
+            {selectedSeason && (
+              <View style={styles.filterTag}>
+                <Text style={styles.filterTagText}>{selectedSeason}</Text>
+                <Pressable onPress={() => setSelectedSeason(null)}>
+                  <Ionicons name="close" size={14} color={colors.textSecondary} />
+                </Pressable>
+              </View>
+            )}
+          </View>
+          <Pressable onPress={clearFilters} style={styles.clearFiltersButton}>
+            <Text style={styles.clearFiltersText}>Clear All</Text>
+          </Pressable>
+        </View>
+      )}
 
       <View style={styles.cluesCard}>
         <View style={styles.cluesHeader}>
           <Ionicons name="bulb" size={20} color={colors.primary} />
           <Text style={styles.cluesTitle}>Clues</Text>
+          <View style={styles.characterInfoBadge}>
+            <Text style={styles.characterInfoText}>{character.category} • {character.season}</Text>
+          </View>
           <View style={styles.cluesCount}>
             <Text style={styles.cluesCountText}>
               {revealed + 1}/{character.clues.length}
@@ -222,6 +270,89 @@ export default function WhoAmIScreen() {
           </Pressable>
         </View>
       )}
+
+      {/* Filter Modal */}
+      <Modal
+        transparent
+        visible={showFilterModal}
+        animationType="slide"
+        onRequestClose={() => setShowFilterModal(false)}
+      >
+        <View style={styles.modalOverlay}>
+          <View style={styles.modalContent}>
+            <View style={styles.modalHeader}>
+              <Text style={styles.modalTitle}>Filter Characters</Text>
+              <Pressable onPress={() => setShowFilterModal(false)}>
+                <Ionicons name="close" size={24} color={colors.textSecondary} />
+              </Pressable>
+            </View>
+
+            <View style={styles.filterSection}>
+              <Text style={styles.filterSectionTitle}>Category</Text>
+              <View style={styles.filterOptions}>
+                {categories.map((category) => (
+                  <Pressable
+                    key={category}
+                    style={[
+                      styles.filterOption,
+                      selectedCategory === category && styles.filterOptionSelected
+                    ]}
+                    onPress={() => setSelectedCategory(category)}
+                  >
+                    <Text style={[
+                      styles.filterOptionText,
+                      selectedCategory === category && styles.filterOptionTextSelected
+                    ]}>
+                      {category}
+                    </Text>
+                  </Pressable>
+                ))}
+              </View>
+            </View>
+
+            <View style={styles.filterSection}>
+              <Text style={styles.filterSectionTitle}>Theme</Text>
+              <View style={styles.filterOptions}>
+                {seasons.map((season) => (
+                  <Pressable
+                    key={season}
+                    style={[
+                      styles.filterOption,
+                      selectedSeason === season && styles.filterOptionSelected
+                    ]}
+                    onPress={() => setSelectedSeason(season)}
+                  >
+                    <Text style={[
+                      styles.filterOptionText,
+                      selectedSeason === season && styles.filterOptionTextSelected
+                    ]}>
+                      {season}
+                    </Text>
+                  </Pressable>
+                ))}
+              </View>
+            </View>
+
+            <View style={styles.modalActions}>
+              <Pressable 
+                style={styles.modalClearButton}
+                onPress={clearFilters}
+              >
+                <Text style={styles.modalClearText}>Clear Filters</Text>
+              </Pressable>
+              <Pressable 
+                style={styles.modalApplyButton}
+                onPress={() => {
+                  loadNewGame();
+                  setShowFilterModal(false);
+                }}
+              >
+                <Text style={styles.modalApplyText}>Apply Filters</Text>
+              </Pressable>
+            </View>
+          </View>
+        </View>
+      </Modal>
     </ScrollView>
   );
 }
@@ -280,6 +411,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     gap: 12,
     marginBottom: 20,
+    alignItems: 'center',
   },
   statBadge: {
     flexDirection: 'row',
@@ -294,6 +426,58 @@ const styles = StyleSheet.create({
     fontSize: 13,
     fontFamily: typography.medium,
     color: colors.textPrimary,
+  },
+  filterButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 4,
+    backgroundColor: colors.primary + '10',
+    paddingHorizontal: 12,
+    paddingVertical: 8,
+    borderRadius: 16,
+    marginLeft: 'auto',
+  },
+  filterButtonText: {
+    fontSize: 13,
+    fontFamily: typography.medium,
+    color: colors.primary,
+  },
+  activeFilters: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginBottom: 16,
+    padding: 12,
+    backgroundColor: colors.surface,
+    borderRadius: 12,
+  },
+  filterTags: {
+    flexDirection: 'row',
+    gap: 8,
+    flexWrap: 'wrap',
+    flex: 1,
+  },
+  filterTag: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 6,
+    backgroundColor: colors.primary + '15',
+    paddingHorizontal: 10,
+    paddingVertical: 6,
+    borderRadius: 16,
+  },
+  filterTagText: {
+    fontSize: 12,
+    fontFamily: typography.medium,
+    color: colors.primary,
+  },
+  clearFiltersButton: {
+    paddingLeft: 12,
+  },
+  clearFiltersText: {
+    fontSize: 12,
+    fontFamily: typography.medium,
+    color: colors.textSecondary,
   },
   cluesCard: {
     backgroundColor: colors.surface,
@@ -311,10 +495,22 @@ const styles = StyleSheet.create({
     borderBottomColor: colors.textSecondary + '15',
   },
   cluesTitle: {
-    flex: 1,
     fontSize: 16,
     fontFamily: typography.semibold,
     color: colors.textPrimary,
+    flex: 1,
+  },
+  characterInfoBadge: {
+    backgroundColor: colors.accent + '15',
+    paddingHorizontal: 10,
+    paddingVertical: 4,
+    borderRadius: 12,
+  },
+  characterInfoText: {
+    fontSize: 11,
+    fontFamily: typography.medium,
+    color: colors.accent,
+    letterSpacing: 0.5,
   },
   cluesCount: {
     backgroundColor: colors.primary + '15',
@@ -494,5 +690,94 @@ const styles = StyleSheet.create({
     fontFamily: typography.semibold,
     color: colors.primary,
     letterSpacing: 0.3,
+  },
+  modalOverlay: {
+    flex: 1,
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 20,
+  },
+  modalContent: {
+    backgroundColor: colors.surface,
+    borderRadius: 20,
+    padding: 24,
+    width: '100%',
+    maxWidth: 400,
+  },
+  modalHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 24,
+  },
+  modalTitle: {
+    fontSize: 20,
+    fontFamily: typography.semibold,
+    color: colors.textPrimary,
+  },
+  filterSection: {
+    marginBottom: 24,
+  },
+  filterSectionTitle: {
+    fontSize: 14,
+    fontFamily: typography.semibold,
+    color: colors.textPrimary,
+    marginBottom: 12,
+    letterSpacing: 0.5,
+  },
+  filterOptions: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: 8,
+  },
+  filterOption: {
+    paddingHorizontal: 16,
+    paddingVertical: 10,
+    backgroundColor: colors.background,
+    borderRadius: 12,
+    borderWidth: 1,
+    borderColor: colors.surface,
+  },
+  filterOptionSelected: {
+    backgroundColor: colors.primary + '15',
+    borderColor: colors.primary,
+  },
+  filterOptionText: {
+    fontSize: 14,
+    fontFamily: typography.medium,
+    color: colors.textPrimary,
+  },
+  filterOptionTextSelected: {
+    color: colors.primary,
+  },
+  modalActions: {
+    flexDirection: 'row',
+    gap: 12,
+    marginTop: 8,
+  },
+  modalClearButton: {
+    flex: 1,
+    paddingVertical: 14,
+    alignItems: 'center',
+    borderRadius: 12,
+    backgroundColor: colors.background,
+  },
+  modalClearText: {
+    fontSize: 15,
+    fontFamily: typography.medium,
+    color: colors.textSecondary,
+  },
+  modalApplyButton: {
+    flex: 1,
+    paddingVertical: 14,
+    alignItems: 'center',
+    borderRadius: 12,
+    backgroundColor: colors.primary,
+  },
+  modalApplyText: {
+    fontSize: 15,
+    fontFamily: typography.semibold,
+    color: '#FFF',
   },
 });
