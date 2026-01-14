@@ -172,7 +172,7 @@ export default function WhoAmIScreen() {
       <View style={styles.header}>
         <View style={styles.titleRow}>
           <View style={styles.iconContainer}>
-            <Ionicons name="sparkles" size={32} color={colors.accent} />
+            <Ionicons name="sparkles" size={32} color={colors.primary} />
           </View>
           <View>
             <Text style={styles.title}>Who Am I?</Text>
@@ -521,7 +521,7 @@ const styles = StyleSheet.create({
     width: 56,
     height: 56,
     borderRadius: 28,
-    backgroundColor: colors.accent + '25',
+    backgroundColor: colors.accent,
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -534,7 +534,7 @@ const styles = StyleSheet.create({
   subtitle: {
     fontSize: 14,
     fontFamily: typography.medium,
-    color: colors.accent,
+    color: colors.textSecondary,
     letterSpacing: 0.5,
     marginTop: 2,
   },
@@ -800,14 +800,14 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
   },
   resultSuccess: {
-    backgroundColor: '#D1FAE5',
+    backgroundColor: colors.surface,
     borderWidth: 3,
-    borderColor: '#10B981',
+    borderColor: colors.primary,
   },
   resultError: {
-    backgroundColor: '#FEE2E2',
+   backgroundColor: colors.surface,
     borderWidth: 3,
-    borderColor: '#EF4444',
+    borderColor: colors.primary,
   },
   confetti: {
     position: 'absolute',
@@ -916,7 +916,7 @@ const styles = StyleSheet.create({
   },
   modalOverlay: {
     flex: 1,
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    backgroundColor: colors.surface,
     justifyContent: 'center',
     alignItems: 'center',
     padding: 20,
