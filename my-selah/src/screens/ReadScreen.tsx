@@ -9,6 +9,7 @@ import { typography } from '../theme/typography';
 import VerseItem from '../components/VerseItem';
 import FadeInView from '../components/FadeInView';
 import ReadingCompletion from '../components/ReadingCompletion';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function ReadScreen (){
   const { completedToday, completeReading } = useReading();
@@ -18,25 +19,51 @@ export default function ReadScreen (){
   const [day, setDay] = useState<number>(1);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-
-  // const loadReading = async () => {
-  //   try {
-  //     setLoading(true);
-  //     setError(null);
-  //     const data = await getDayReading(1); 
-  //     setDay(data.meta.day);
-  //     setVerses(data.content.scripture.verses);
-  //     setPagination(data.content.scripture.pagination);
-  //   } catch (err: any) {
-  //     setError(err.message);
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // };
+  const [currentDayKey, setCurrentDayKey] = useState<string>('');
 
   useEffect(() => {
-    loadReading();
+    checkAndLoadReading();
   }, []);
+
+  const getCurrentDayKey = () => {
+    const now = new Date();
+    return `reading_${now.getFullYear()}_${now.getMonth()}_${now.getDate()}`;
+  };
+
+  const checkAndLoadReading = async () => {
+    const todayKey = getCurrentDayKey();
+    setCurrentDayKey(todayKey);
+    
+    const lastLoadedKey = await AsyncStorage.getItem('last_reading_day');
+    
+    if (lastLoadedKey !== todayKey) {
+      await AsyncStorage.setItem('last_reading_day', todayKey);
+      loadReading();
+    } else {
+      loadReading();
+    }
+  };
+
+  const loadReading = async () => {
+    try {
+      setLoading(true);
+      setError(null);
+      
+      const todayKey = getCurrentDayKey();
+      const dayToLoad = parseInt(todayKey.split('_').pop() || '1', 10) % 30 + 1;
+      
+      const data = await getDayReading(dayToLoad);
+      
+      setDay(data.meta.day);
+      setVerses(data.content.scripture.verses);
+      setPagination(data.content.scripture.pagination);
+    } catch (err: any) {
+      setError(err.message || "Failed to load reading");
+      console.error("Error loading reading:", err);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const loadMore = async () => {
     if (!pagination?.has_more || !day) return;
@@ -51,24 +78,6 @@ export default function ReadScreen (){
     const currentVerse = pagination.start + verses.length;
     const totalVerses = pagination.total || currentVerse;
     return Math.round((currentVerse / totalVerses) * 100);
-  };
-
-    const loadReading = async () => {
-    try {
-      setLoading(true);
-      setError(null);
-      const dayToLoad = 1; 
-      const data = await getDayReading(dayToLoad);
-      
-      setDay(data.meta.day);
-      setVerses(data.content.scripture.verses);
-      setPagination(data.content.scripture.pagination);
-    } catch (err: any) {
-      setError(err.message || "Failed to load reading");
-      console.error("Error loading reading:", err);
-    } finally {
-      setLoading(false);
-    }
   };
 
   if (loading) {
