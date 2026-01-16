@@ -12,7 +12,7 @@ export async function saveReflection(reflection:Reflection) {
         const existing = await AsyncStorage.getItem(STORAGE_KEY);
         const reflections = existing ? JSON.parse(existing) : {};
 
-        reflections[reflections.date] = reflection;
+        reflections[reflection.date] = reflection;
 
         await AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(reflections));
     }catch (error){
@@ -25,9 +25,9 @@ export async function getReflectionbyDate(date: string) {
         const existing = await AsyncStorage.getItem(STORAGE_KEY);
 
         if(!existing) return null
-        const refelections = JSON.parse(existing);
+        const reflections = JSON.parse(existing);
 
-        return refelections[date] || null;
+        return reflections[date] || null;
 
     }catch (error){
         console.error("Failed to load reflection", error)
